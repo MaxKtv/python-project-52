@@ -4,7 +4,6 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from django_filters.views import FilterView
-from django.shortcuts import redirect
 from .models import Task
 from .forms import TaskForm
 from .filter import TaskFilter
@@ -43,20 +42,14 @@ class TaskUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "Задача успешно обновлена"
 
 
-class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, DeleteView):
+class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Task
     template_name = 'tasks/task_confirm_delete.html'
     success_url = reverse_lazy('tasks')
-    success_message = "Задача успешно удалена"
 
     def test_func(self):
         return self.get_object().author == self.request.user
 
     def handle_no_permission(self):
-        messages.add_message(
-            self.request,
-            messages.ERROR,
-            "Задачу может удалить только её автор",
-            extra_tags='danger'
-        )
-        return redirect('tasks')
+        messages.error(self.request, "Удалять задачу может только её автор")
+        return super().handle_no_permission()
