@@ -11,6 +11,9 @@ files = [
     {file = "asgiref-3.8.1.tar.gz", hash = "sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590"},
 ]
 
+[package.dependencies]
+typing-extensions = {version = ">=4", markers = "python_version < \"3.11\""}
+
 [package.extras]
 tests = ["mypy (>=0.800)", "pytest", "pytest-asyncio"]
 
@@ -305,13 +308,13 @@ files = [
 
 [[package]]
 name = "packaging"
-version = "24.1"
+version = "24.2"
 description = "Core utilities for Python packages"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "packaging-24.1-py3-none-any.whl", hash = "sha256:5b8f2217dbdbd2f7f384c41c628544e6d52f2d0f53c6d0c3ea61aa5d1d7ff124"},
-    {file = "packaging-24.1.tar.gz", hash = "sha256:026ed72c8ed3fcce5bf8950572258698927fd1dbda10a5e981cdf0ac37f4f002"},
+    {file = "packaging-24.2-py3-none-any.whl", hash = "sha256:09abb1bccd265c01f4a3aa3f7a7db064b36514d2cba19a2f694fe6150451a759"},
+    {file = "packaging-24.2.tar.gz", hash = "sha256:c228a6dc5e932d346bc5739379109d49e8853dd8223571c7c5b55260edc0b97f"},
 ]
 
 [[package]]
@@ -373,13 +376,13 @@ use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "rollbar"
-version = "1.0.0"
+version = "1.1.0"
 description = "Easy and powerful exception tracking with Rollbar. Send messages and exceptions with arbitrary context, get back aggregates, and debug production issues quickly."
 optional = false
-python-versions = "*"
+python-versions = ">=3.6"
 files = [
-    {file = "rollbar-1.0.0-py3-none-any.whl", hash = "sha256:b7831cd8f2d2384e5922cdfb18897890c4ac4609fddfd2a821efe17b92cf1e58"},
-    {file = "rollbar-1.0.0.tar.gz", hash = "sha256:6347b7e49f22f0296fc287a6aea75d642cf64494d2ee127042a7a593c97df3af"},
+    {file = "rollbar-1.1.0-py3-none-any.whl", hash = "sha256:a39634cdd53a8ae3ebdb850c0075da8fd88154bea356acee738b52aef79ec384"},
+    {file = "rollbar-1.1.0.tar.gz", hash = "sha256:0894302f7caf3d1f16c84ae3d609dc6385fcdba95ae78c9af1f4809a7dd44a89"},
 ]
 
 [package.dependencies]
@@ -398,13 +401,13 @@ files = [
 
 [[package]]
 name = "sqlparse"
-version = "0.5.1"
+version = "0.5.2"
 description = "A non-validating SQL parser."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "sqlparse-0.5.1-py3-none-any.whl", hash = "sha256:773dcbf9a5ab44a090f3441e2180efe2560220203dc2f8c0b0fa141e18b505e4"},
-    {file = "sqlparse-0.5.1.tar.gz", hash = "sha256:bb6b4df465655ef332548e24f08e205afc81b9ab86cb1c45657a7ff173a3a00e"},
+    {file = "sqlparse-0.5.2-py3-none-any.whl", hash = "sha256:e99bc85c78160918c3e1d9230834ab8d80fc06c59d03f8db2618f65f65dda55e"},
+    {file = "sqlparse-0.5.2.tar.gz", hash = "sha256:9e37b35e16d1cc652a2545f0997c1deb23ea28fa1f3eefe609eee3063c3b105f"},
 ]
 
 [package.extras]
@@ -466,5 +469,5 @@ brotli = ["brotli"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.12"
-content-hash = "632caf9c0e1fea46d68b79bb1517f3123dd27a55816668acfa8f3fde8b51c289"
+python-versions = ">=3.10"
+content-hash = "92bfa80fc8619a8de053cb7ae11e6349f173b8b31eb894dbcc087745a480bd71"
