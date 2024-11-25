@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2>Пользователи</h2>
+<ul>
+    {% for user in object_list %}
+    <li>{{ user.username }} - <a href="{{ user.get_absolute_url }}">Edit</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}
