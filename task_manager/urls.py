@@ -24,7 +24,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('test-rollbar/', test_rollbar_error, name='test_rollbar'),
     path('', HomeView.as_view(), name='home'),
-    path('login/', LoginView.as_view(template_name='users/login.html'), name='login'),
+    path('login/', LoginView.as_view(
+        template_name='users/login.html',
+        redirect_authenticated_user=True
+    ), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', UserCreateView.as_view(), name='register'),
     path('users/', include('task_manager.users.urls')),
