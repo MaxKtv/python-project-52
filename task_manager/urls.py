@@ -22,7 +22,6 @@ from task_manager.users.views import UserCreateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('test-rollbar/', test_rollbar_error, name='test_rollbar'),
     path('', HomeView.as_view(), name='home'),
     path('login/', LoginView.as_view(
         template_name='users/login.html',
