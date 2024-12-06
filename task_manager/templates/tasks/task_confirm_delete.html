@@ -2,11 +2,11 @@
 {% load i18n %}
 
 {% block content %}
-<h1>{% trans "Delete label" %}</h1>
-<p>{% trans "Are you sure you want to delete label" %} "{{ object.name }}"?</p>
+<h1>{% trans "Delete task" %}</h1>
+<p>{% trans "Are you sure you want to delete task" %} "{{ object.name }}"?</p>
 <form method="post">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">{% trans "Yes, delete" %}</button>
-    <a href="{% url 'labels' %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
+    <a href="{% url 'tasks' %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
 </form>
 {% endblock %}

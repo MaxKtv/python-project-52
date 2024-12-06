@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block content %}
-<h1>{% if object %}{% trans "Edit status" %}{% else %}{% trans "Create status" %}{% endif %}</h1>
+<h1>{% trans "Edit user" %}</h1>
 <form method="post">
     {% csrf_token %}
     {% for field in form %}
@@ -17,8 +17,6 @@
         {% endfor %}
     </div>
     {% endfor %}
-    <button type="submit" class="btn btn-primary">
-        {% if object %}{% trans "Update" %}{% else %}{% trans "Create" %}{% endif %}
-    </button>
+    <button type="submit" class="btn btn-primary">{% trans "Update" %}</button>
 </form>
 {% endblock %}

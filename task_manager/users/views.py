@@ -7,6 +7,7 @@ from task_manager.mixins import (
 )
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.utils.translation import gettext_lazy as _
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -22,6 +23,7 @@ class CustomUserCreationForm(UserCreationForm):
 class UserListView(ListView):
     model = User
     template_name = 'users/user_list.html'
+    ordering = ['id']
 
 
 class UserCreateView(CustomCreateView):
@@ -29,7 +31,7 @@ class UserCreateView(CustomCreateView):
     form_class = CustomUserCreationForm
     template_name = 'users/register.html'
     success_url = reverse_lazy('login')
-    success_message = "Пользователь успешно зарегистрирован"
+    success_message = _("User successfully registered")
 
 
 class UserUpdateView(CustomUpdateView, CustomPermissionMixin):
@@ -37,8 +39,8 @@ class UserUpdateView(CustomUpdateView, CustomPermissionMixin):
     fields = ['username', 'first_name', 'last_name']
     template_name = 'users/user_form.html'
     success_url = reverse_lazy('user_list')
-    success_message = "Пользователь успешно изменён"
-    permission_message = "У вас нет прав для изменения пользователя"
+    success_message = _("User successfully updated")
+    permission_message = _("You don't have rights to modify the user")
     permission_url = 'user_list'
 
     def test_func(self):
@@ -49,19 +51,26 @@ class UserDeleteView(CustomPermissionMixin, CustomDeleteMixin):
     model = User
     template_name = 'users/user_confirm_delete.html'
     success_url = reverse_lazy('user_list')
-    success_message = "Пользователь успешно удалён"
-    permission_message = "У вас нет прав для удаления пользователя"
+    success_message = _("User successfully deleted")
+    permission_message = _("You don't have rights to delete the user")
     permission_url = 'user_list'
 
-    def test_func(self):
-        return (self.request.user.is_superuser
-                or self.request.user.id == self.get_object().id)
+    def dispatch(self, request, *args, **kwargs):
+        user = self.get_object()
+        if not (request.user.is_superuser or request.user.id == user.id):
+            messages.error(
+                request,
+                self.permission_message,
+                extra_tags='danger'
+            )
+            return redirect(self.permission_url)
+        return super().dispatch(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         if self.get_object().task_set.exists():
             messages.error(
                 request,
-                "Невозможно удалить пользователя, потому что он используется",
+                _("Cannot delete user because they have associated tasks"),
                 extra_tags='danger'
             )
             return redirect('user_list')

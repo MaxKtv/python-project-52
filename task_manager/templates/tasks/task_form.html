@@ -1,10 +1,24 @@
 {% extends 'layout.html' %}
+{% load i18n %}
 
 {% block content %}
-<h1>{% if object %}Редактировать задачу{% else %}Создать задачу{% endif %}</h1>
+<h1>{% if object %}{% trans "Edit task" %}{% else %}{% trans "Create task" %}{% endif %}</h1>
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Сохранить</button>
+    {% for field in form %}
+    <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}
+        <small class="form-text text-muted">{{ field.help_text }}</small>
+        {% endif %}
+        {% for error in field.errors %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">
+        {% if object %}{% trans "Update" %}{% else %}{% trans "Create" %}{% endif %}
+    </button>
 </form>
 {% endblock %}

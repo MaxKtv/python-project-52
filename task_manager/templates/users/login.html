@@ -1,10 +1,11 @@
 {% extends 'layout.html' %}
+{% load i18n %}
 
 {% block content %}
-<h1>Вход</h1>
+<h1>{% trans "Login" %}</h1>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Войти</button>
+    <button type="submit" class="btn btn-primary">{% trans "Log in" %}</button>
 </form>
 {% endblock %}

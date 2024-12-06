@@ -1,18 +1,19 @@
 {% extends 'layout.html' %}
+{% load i18n %}
 
-{% block title %}Пользователи{% endblock %}
+{% block title %}{% trans "Users" %}{% endblock %}
 
 {% block content %}
-<h1 class="my-4">Пользователи</h1>
+<h1 class="my-4">{% trans "Users" %}</h1>
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Имя пользователя</th>
-            <th>Полное имя</th>
-            <th>Дата создания</th>
-            <th>Действия</th>
+            <th>{% trans "ID" %}</th>
+            <th>{% trans "Username" %}</th>
+            <th>{% trans "Full name" %}</th>
+            <th>{% trans "Created at" %}</th>
+            <th>{% trans "Actions" %}</th>
         </tr>
     </thead>
     <tbody>
@@ -23,8 +24,8 @@
             <td>{{ user.get_full_name }}</td>
             <td>{{ user.date_joined|date:"d.m.Y H:i" }}</td>
             <td>
-                <a href="{% url 'user_update' user.id %}" class="btn btn-primary btn-sm">Изменить</a>
-                <a href="{% url 'user_delete' user.id %}" class="btn btn-danger btn-sm">Удалить</a>
+                <a href="{% url 'user_update' user.id %}" class="btn btn-primary btn-sm">{% trans "Update" %}</a>
+                <a href="{% url 'user_delete' user.id %}" class="btn btn-danger btn-sm">{% trans "Delete" %}</a>
             </td>
         </tr>
         {% endfor %}

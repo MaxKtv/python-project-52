@@ -1,12 +1,13 @@
-from django.urls import path
+from task_manager.base_urls import get_crud_urlpatterns
 from .views import (LabelListView,
                     LabelCreateView,
                     LabelUpdateView,
                     LabelDeleteView)
 
-urlpatterns = [
-    path('', LabelListView.as_view(), name='labels'),
-    path('create/', LabelCreateView.as_view(), name='label_create'),
-    path('<int:pk>/update/', LabelUpdateView.as_view(), name='label_update'),
-    path('<int:pk>/delete/', LabelDeleteView.as_view(), name='label_delete'),
-]
+urlpatterns = get_crud_urlpatterns(
+    LabelListView,
+    LabelCreateView,
+    LabelUpdateView,
+    LabelDeleteView,
+    'labels'
+)

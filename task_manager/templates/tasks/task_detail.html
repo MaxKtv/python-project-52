@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans "Task view" %}</h1>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">{{ task.name }}</h5>
+    </div>
+    <div class="card-body">
+        <p><strong>{% trans "Description" %}:</strong> {{ task.description }}</p>
+        <p><strong>{% trans "Status" %}:</strong> {{ task.status }}</p>
+        <p><strong>{% trans "Author" %}:</strong> {{ task.author }}</p>
+        <p><strong>{% trans "Executor" %}:</strong> {{ task.executor }}</p>
+        <p><strong>{% trans "Created at" %}:</strong> {{ task.created_at|date:"d.m.Y H:i" }}</p>
+        
+        {% if task.labels.all %}
+        <p><strong>{% trans "Labels" %}:</strong></p>
+        <ul>
+            {% for label in task.labels.all %}
+            <li>{{ label.name }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'task_update' task.id %}" class="btn btn-primary">{% trans "Update" %}</a>
+        <a href="{% url 'task_delete' task.id %}" class="btn btn-danger">{% trans "Delete" %}</a>
+        <a href="{% url 'tasks' %}" class="btn btn-secondary">{% trans "Back" %}</a>
+    </div>
+</div>
+{% endblock %}

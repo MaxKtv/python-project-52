@@ -4,6 +4,10 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from django.shortcuts import redirect
 from django import forms
+from django.test import TestCase
+from django.urls import reverse
+from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 
 class CustomFormWidgetMixin:
@@ -22,7 +26,7 @@ class CustomPermissionMixin(LoginRequiredMixin, UserPassesTestMixin):
         if not self.request.user.is_authenticated:
             messages.error(
                 self.request,
-                'Вы не авторизованы! Пожалуйста, выполните вход',
+                _('You are not authorized! Please log in'),
                 extra_tags='danger'
             )
             return redirect('login')
@@ -57,7 +61,57 @@ class CustomLoginRequiredMixin(LoginRequiredMixin):
     def handle_no_permission(self):
         messages.error(
             self.request,
-            'Вы не авторизованы! Пожалуйста, выполните вход',
+            _('You are not authorized! Please log in'),
             extra_tags='danger'
         )
         return redirect('login')
+
+
+class BaseCRUDTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser',
+                                             password='password')
+        self.client.login(username='testuser', password='password')
+
+    def create_instance(self, model, url_name, data):
+        self.client.post(reverse(url_name), data)
+        self.assertEqual(model.objects.count(), 2)
+
+    def update_instance(self, instance, url_name, data):
+        self.client.post(reverse(url_name, args=[instance.pk]), data)
+        instance.refresh_from_db()
+        self.assertEqual(instance.name, data['name'])
+
+    def delete_instance(self, model, instance, url_name):
+        self.client.post(reverse(url_name, args=[instance.pk]))
+        self.assertEqual(model.objects.count(), 0)
+
+
+class BaseCUDView(LoginRequiredMixin, SuccessMessageMixin):
+    model = None
+    form_class = None
+    template_name = None
+    success_url = None
+    success_message = None
+
+
+class BaseCreateView(BaseCUDView, CreateView):
+    pass
+
+
+class BaseUpdateView(BaseCUDView, UpdateView):
+    pass
+
+
+class BaseDeleteView(BaseCUDView, DeleteView):
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if hasattr(self.object, 'task_set') and self.object.task_set.exists():
+            messages.error(
+                request,
+                f"Невозможно удалить {self.model.__name__.lower()}, "
+                f"потому что он используется",
+                extra_tags='danger'
+            )
+            return redirect(self.success_url)
+        return super().post(request, *args, **kwargs)

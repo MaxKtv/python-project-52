@@ -1,10 +1,10 @@
 {% extends 'layout.html' %}
 {% load i18n %}
-{% block title %}Home{% endblock %}
+{% block title %}{% trans "Home" %}{% endblock %}
 
 {% block content %}
 <div class="text-center">
-    <h1>{% trans "Добро пожаловать в  Менеджер задач!" %}</h1>
-    <p>{% trans "Эффективно управляйте своими задачами" %}</p>
+    <h1>{% trans "Welcome to Task Manager!" %}</h1>
+    <p>{% trans "Manage your tasks efficiently" %}</p>
 </div>
 {% endblock %}

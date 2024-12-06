@@ -5,28 +5,28 @@ from .models import Task
 from task_manager.statuses.models import Status
 from task_manager.labels.models import Label
 from task_manager.mixins import CustomFormWidgetMixin
+from django.utils.translation import gettext_lazy as _
+
+
+class BaseModelChoiceFilter:
+    @staticmethod
+    def create_filter(model_class):
+        return django_filters.ModelChoiceFilter(
+            queryset=model_class.objects.all(),
+            widget=CustomFormWidgetMixin.get_form_widget
+            (model_class.objects.all())
+        )
 
 
 class TaskFilter(django_filters.FilterSet, CustomFormWidgetMixin):
-    executor = django_filters.ModelChoiceFilter(
-        queryset=User.objects.all(),
-        widget=CustomFormWidgetMixin.get_form_widget(User.objects.all())
-    )
-
-    status = django_filters.ModelChoiceFilter(
-        queryset=Status.objects.all(),
-        widget=CustomFormWidgetMixin.get_form_widget(Status.objects.all())
-    )
-
-    labels = django_filters.ModelChoiceFilter(
-        queryset=Label.objects.all(),
-        widget=CustomFormWidgetMixin.get_form_widget(Label.objects.all())
-    )
+    executor = BaseModelChoiceFilter.create_filter(User)
+    status = BaseModelChoiceFilter.create_filter(Status)
+    labels = BaseModelChoiceFilter.create_filter(Label)
 
     self_tasks = django_filters.BooleanFilter(
         widget=forms.CheckboxInput,
         method='filter_self_tasks',
-        label='Только свои задачи'
+        label=_('Only my tasks')
     )
 
     def filter_self_tasks(self, queryset, name, value):
