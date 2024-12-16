@@ -1,12 +1,21 @@
+from task_manager.mixins.urls import get_crud_urlpatterns
 from django.urls import path
 from .views import (
     TaskListView, TaskDetailView, TaskCreateView, TaskUpdateView, TaskDeleteView
 )
 
-urlpatterns = [
-    path('', TaskListView.as_view(), name='tasks'),
-    path('create/', TaskCreateView.as_view(), name='task_create'),
-    path('<int:pk>/', TaskDetailView.as_view(), name='task_detail'),
-    path('<int:pk>/update/', TaskUpdateView.as_view(), name='task_update'),
-    path('<int:pk>/delete/', TaskDeleteView.as_view(), name='task_delete'),
+app_name = 'tasks'
+
+# Основные CRUD URL'ы
+crud_patterns = get_crud_urlpatterns(
+    TaskListView,
+    TaskCreateView,
+    TaskUpdateView,
+    TaskDeleteView,
+    ''
+)
+
+# Добавляем URL для детального просмотра
+urlpatterns = crud_patterns + [
+    path('<int:pk>/', TaskDetailView.as_view(), name='detail'),
 ]

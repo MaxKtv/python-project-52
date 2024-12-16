@@ -1,48 +1,35 @@
-from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.contrib import messages
-from django.shortcuts import redirect
+from django.utils.translation import gettext_lazy as _
+
+from task_manager.mixins import ListView, CreateView, UpdateView, DeleteView
 from .models import Label
 from .forms import LabelForm
 
 
-class LabelListView(LoginRequiredMixin, ListView):
+class LabelListView(ListView):
+    """Представление для просмотра списка меток"""
     model = Label
+    title = _('Labels')
     template_name = 'labels/label_list.html'
     context_object_name = 'labels'
 
 
-class LabelCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class LabelCreateView(CreateView):
+    """Представление для создания метки"""
     model = Label
     form_class = LabelForm
-    template_name = 'labels/label_form.html'
-    success_url = reverse_lazy('labels')
-    success_message = "Метка успешно создана."
+    success_message = _("Label successfully created")
 
 
-class LabelUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class LabelUpdateView(UpdateView):
+    """Представление для обновления метки"""
     model = Label
     form_class = LabelForm
-    template_name = 'labels/label_form.html'
-    success_url = reverse_lazy('labels')
-    success_message = "Метка успешно обновлена."
+    success_message = _("Label successfully updated")
 
 
-class LabelDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class LabelDeleteView(DeleteView):
+    """Представление для удаления метки"""
     model = Label
     template_name = 'labels/label_confirm_delete.html'
-    success_url = reverse_lazy('labels')
-    success_message = "Метка успешно удалена"
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if self.object.task_set.exists():
-            messages.error(
-                request,
-                "Невозможно удалить метку, потому что она используется",
-                extra_tags='danger'
-            )
-            return redirect('labels')
-        return super().post(request, *args, **kwargs)
+    protected_message = _("Cannot delete label because it's in use")
+    success_message = _("Label successfully deleted")

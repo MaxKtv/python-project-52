@@ -1,8 +1,8 @@
-from django import forms
 from .models import Status
+from task_manager.mixins.forms import BaseNameModelForm
 
 
-class StatusForm(forms.ModelForm):
+class StatusForm(BaseNameModelForm):
     class Meta:
         model = Status
         fields = ['name']

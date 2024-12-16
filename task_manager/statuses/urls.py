@@ -1,11 +1,15 @@
-from django.urls import path
-from .views import (
-    StatusListView, StatusCreateView, StatusUpdateView, StatusDeleteView
-)
+from task_manager.mixins.urls import get_crud_urlpatterns
+from .views import (StatusListView,
+                    StatusCreateView,
+                    StatusUpdateView,
+                    StatusDeleteView)
 
-urlpatterns = [
-    path('', StatusListView.as_view(), name='statuses'),
-    path('create/', StatusCreateView.as_view(), name='status_create'),
-    path('<int:pk>/update/', StatusUpdateView.as_view(), name='status_update'),
-    path('<int:pk>/delete/', StatusDeleteView.as_view(), name='status_delete'),
-]
+app_name = 'statuses'
+
+urlpatterns = get_crud_urlpatterns(
+    StatusListView,
+    StatusCreateView,
+    StatusUpdateView,
+    StatusDeleteView,
+    ''
+)

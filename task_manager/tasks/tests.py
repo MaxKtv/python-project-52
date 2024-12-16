@@ -2,54 +2,47 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 from task_manager.tasks.models import Task, Status, Label
+from task_manager.base_tests import BaseCRUDTest
 
 
-class TaskCRUDTest(TestCase):
+class TaskCRUDTest(BaseCRUDTest):
+    model = Task
+    base_url_name = 'task'
+
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser',
-                                             password='password')
+        self.user = User.objects.create_user(
+            username='testuser',
+            password='password'
+        )
         self.client.login(username='testuser', password='password')
         self.status = Status.objects.create(name='Новый')
-        self.task = Task.objects.create(
-            name='Задача 1',
-            description='Описание',
-            status=self.status,
-            author=self.user,
-        )
-
-    def test_create_task(self):
-        self.client.post(reverse('task_create'), {
-            'name': 'Задача 2',
-            'description': 'Описание задачи',
+        self.valid_data = {
+            'name': 'Задача 1',
+            'description': 'Описание',
             'status': self.status.id,
-        })
-        self.assertEqual(Task.objects.count(), 2)
-
-    def test_update_task(self):
-        self.client.post(reverse('task_update', args=[self.task.id]), {
-            'name': 'Обновленная задача',
-            'description': 'Новое описание',
-            'status': self.status.id,
-        })
-        self.task.refresh_from_db()
-        self.assertEqual(self.task.name, 'Обновленная задача')
-
-    def test_delete_task_by_author(self):
-        self.client.post(reverse('task_delete', args=[self.task.id]))
-        self.assertEqual(Task.objects.count(), 0)
+            'author': self.user,
+        }
+        self.instance = self.model.objects.create(**self.valid_data)
 
     def test_delete_task_by_non_author(self):
-        User.objects.create_user(username='another', password='password')
+        User.objects.create_user(
+            username='another',
+            password='password'
+        )
         self.client.login(username='another', password='password')
-        response = self.client.post(reverse('task_delete', args=[self.task.id]))
+        response = self.client.post(
+            reverse(f'{self.base_url_name}_delete', args=[self.instance.pk])
+        )
         self.assertEqual(response.status_code, 403)
-        self.assertEqual(Task.objects.count(), 1)
+        self.assertEqual(self.model.objects.count(), 1)
 
 
 class TaskFilterTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser',
-                                             password='password')
+        self.user = User.objects.create_user(
+            username='testuser',
+            password='password'
+        )
         self.client.login(username='testuser', password='password')
         self.status = Status.objects.create(name='Новый')
         self.label = Label.objects.create(name='Bug')

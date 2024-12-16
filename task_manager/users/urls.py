@@ -1,11 +1,12 @@
-from django.urls import path
+from task_manager.mixins.urls import get_crud_urlpatterns
 from . import views
 
-urlpatterns = [
-    path('create/', views.UserCreateView.as_view(), name='user_create'),
-    path('<int:pk>/update/', views.UserUpdateView.as_view(),
-         name='user_update'),
-    path('<int:pk>/delete/', views.UserDeleteView.as_view(),
-         name='user_delete'),
-    path('', views.UserListView.as_view(), name='user_list'),
-]
+app_name = 'users'
+
+urlpatterns = get_crud_urlpatterns(
+    list_view=views.UserListView,
+    create_view=views.UserCreateView,
+    update_view=views.UserUpdateView,
+    delete_view=views.UserDeleteView,
+    base_name=''
+)

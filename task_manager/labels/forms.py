@@ -1,8 +1,8 @@
-from django import forms
 from .models import Label
+from task_manager.mixins.forms import BaseNameModelForm
 
 
-class LabelForm(forms.ModelForm):
+class LabelForm(BaseNameModelForm):
     class Meta:
         model = Label
         fields = ['name']

@@ -1,16 +1,16 @@
 {% extends 'layout.html' %}
+{% load i18n %}
 
-{% block title %}Удаление пользователя{% endblock %}
+{% block title %}{% trans "Delete user" %}{% endblock %}
 
 {% block content %}
-<h1 class="my-4">Удаление пользователя</h1>
-
+<h1>{% trans "Delete user" %}</h1>
 <form method="post">
     {% csrf_token %}
-    <p>Вы уверены, что хотите удалить пользователя "{{ object.username }}"?</p>
+    <p>{% trans "Are you sure you want to delete user" %} "{{ object.username }}"?</p>
     <div class="form-group">
-        <input class="btn btn-danger" type="submit" value="Да, удалить">
-        <a class="btn btn-secondary" href="{% url 'user_list' %}">Отмена</a>
+        <button type="submit" class="btn btn-danger">{% trans "Yes, delete" %}</button>
+        <a href="{% url 'users:list' %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
     </div>
 </form>
 {% endblock %}

@@ -8,8 +8,5 @@ class HomeView(TemplateView):
 
 
 def test_rollbar_error(request):
-    try:
-        1 / 0
-    except ZeroDivisionError:
-        rollbar.report_exc_info()
-        return HttpResponseServerError("This is a test error sent to Rollbar.")
+    rollbar.report_message('Test error from task manager', 'error')
+    return HttpResponseServerError('Test error page')

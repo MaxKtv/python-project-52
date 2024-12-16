@@ -1,10 +1,8 @@
-from django.db import models
+from django.utils.translation import gettext_lazy as _
+from task_manager.mixins.base import NamedModel
 
 
-class Label(models.Model):
-    name = models.CharField(max_length=100,
-                            unique=True,
-                            verbose_name="Название метки")
-
-    def __str__(self):
-        return self.name
+class Label(NamedModel):
+    class Meta(NamedModel.Meta):
+        verbose_name = _('Label')
+        verbose_name_plural = _('Labels')
