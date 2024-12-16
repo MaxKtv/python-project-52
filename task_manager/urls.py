@@ -16,13 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from task_manager.views import HomeView, test_rollbar_error
+from task_manager.views import HomeView
 from django.contrib.auth.views import LoginView, LogoutView
 from task_manager.users.views import UserCreateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('test-rollbar/', test_rollbar_error, name='test_rollbar'),
     path('', HomeView.as_view(), name='home'),
     path('login/', LoginView.as_view(
         template_name='users/login.html',
