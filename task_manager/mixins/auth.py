@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse_lazy
 
 
 class BaseAuthMixin:
@@ -17,6 +18,8 @@ class BaseAuthMixin:
 
     def redirect_with_error(self, error_message, url):
         messages.error(self.request, error_message)
+        if not url:
+            url = reverse_lazy('login')
         return redirect(url)
 
     def handle_no_permission(self):
@@ -55,12 +58,12 @@ class BasePermissionMixin(BaseAuthMixin, UserPassesTestMixin):
 
 class UserPermissionMixin(BasePermissionMixin):
     """Миксин для проверки прав на управление пользователями."""
-    permission_message = _("Only administrators can modify users.")
+    permission_message = _("You don't have sufficient permissions to modify this user")
     permission_url = 'users:list'
 
     def test_func(self):
-        """Проверяет, является ли пользователь администратором."""
-        return self.request.user.is_superuser
+        user = self.get_object()
+        return self.request.user == user
 
 
 class SuperuserRequiredMixin(BasePermissionMixin):

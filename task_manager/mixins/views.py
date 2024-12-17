@@ -56,4 +56,6 @@ class DeleteView(BaseViewMixin, DjangoDeleteView):
             return response
         except ProtectedError:
             messages.error(request, self.protected_message)
+            if self.success_url:
+                return redirect(self.success_url)
             return redirect(self.get_success_url())

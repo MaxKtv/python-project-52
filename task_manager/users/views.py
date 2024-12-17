@@ -41,4 +41,5 @@ class UserDeleteView(UserPermissionMixin, DeleteView):
     template_name = 'users/user_confirm_delete.html'
     success_url = reverse_lazy('users:list')
     success_message = _("User successfully deleted")
-    permission_message = PERMISSION_DENIED_MESSAGE
+    protected_url = reverse_lazy('users:list')
+    protected_message = PERMISSION_DENIED_MESSAGE
