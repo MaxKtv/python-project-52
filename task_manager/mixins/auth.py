@@ -58,7 +58,7 @@ class BasePermissionMixin(BaseAuthMixin, UserPassesTestMixin):
 
 class UserPermissionMixin(BasePermissionMixin):
     """Миксин для проверки прав на управление пользователями."""
-    permission_message = _("You don't have sufficient permissions to modify this user")
+    permission_message = _("You don't have permissions to modify user")
     permission_url = 'users:list'
 
     def test_func(self):

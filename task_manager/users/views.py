@@ -6,10 +6,6 @@ from task_manager.mixins.auth import UserPermissionMixin
 from .forms import CustomUserCreationForm, UserUpdateForm
 
 
-# Общие сообщения
-PERMISSION_DENIED_MESSAGE = _("You don't have rights to modify another user")
-
-
 class UserListView(ListView):
     """Представление для просмотра списка пользователей"""
     model = User
@@ -32,7 +28,6 @@ class UserUpdateView(UserPermissionMixin, UpdateView):
     template_name = 'users/user_form.html'
     success_url = reverse_lazy('users:list')
     success_message = _("User successfully updated")
-    permission_message = PERMISSION_DENIED_MESSAGE
 
 
 class UserDeleteView(UserPermissionMixin, DeleteView):
@@ -42,4 +37,5 @@ class UserDeleteView(UserPermissionMixin, DeleteView):
     success_url = reverse_lazy('users:list')
     success_message = _("User successfully deleted")
     protected_url = reverse_lazy('users:list')
-    protected_message = PERMISSION_DENIED_MESSAGE
+    protected_message = _("You don't have rights to delete "
+                          "this user because its in use")

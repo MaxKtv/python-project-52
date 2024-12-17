@@ -97,7 +97,7 @@ class BaseViewMixin:
         if not hasattr(self, '_success_url'):
             app_label = self.model._meta.app_label
             if app_label == 'users':
-                self._success_url = reverse_lazy('users')
+                self._success_url = reverse_lazy('users:list')
             else:
                 self._success_url = reverse_lazy(f'{app_label}:list')
         return self._success_url
