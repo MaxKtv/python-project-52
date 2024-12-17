@@ -41,4 +41,3 @@ class UserDeleteView(UserPermissionMixin, DeleteView):
     permission_url = reverse_lazy('users:list')
     protected_message = _("You don't have rights to delete "
                           "this user because its in use")
-
