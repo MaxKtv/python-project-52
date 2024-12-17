@@ -8,13 +8,13 @@ from django.urls import reverse_lazy
 class BaseAuthMixin:
     """Базовый миксин для обработки аутентификации и ошибок доступа."""
     permission_message = _("You are not authorized! Please log in.")
-    permission_url = 'login'
+    permission_url = reverse_lazy('login')
 
     def get_login_url(self):
-        return getattr(self, 'login_url', 'login')
+        return getattr(self, 'login_url', reverse_lazy('login'))
 
     def get_permission_url(self):
-        return getattr(self, 'permission_url', 'login')
+        return getattr(self, 'permission_url', reverse_lazy('login'))
 
     def redirect_with_error(self, error_message, url):
         messages.error(self.request, error_message)
@@ -36,7 +36,7 @@ class BaseAuthMixin:
 
 class AuthRequiredMixin(LoginRequiredMixin, BaseAuthMixin):
     """Миксин для страниц, требующих аутентификации."""
-    login_url = 'login'
+    login_url = reverse_lazy('login')
 
 
 class AuthMixin(BaseAuthMixin):
@@ -53,13 +53,20 @@ class BasePermissionMixin(BaseAuthMixin, UserPassesTestMixin):
 
     def handle_no_permission(self):
         """Обработка случаев отсутствия разрешений"""
-        return BaseAuthMixin.handle_no_permission(self)
+        if not self.request.user.is_authenticated:
+            return self.redirect_with_error(
+                _("You are not authorized! Please log in."),
+                self.get_login_url()
+            )
+        return self.redirect_with_error(
+            self.permission_message, self.get_permission_url()
+        )
 
 
 class UserPermissionMixin(BasePermissionMixin):
     """Миксин для проверки прав на управление пользователями."""
     permission_message = _("You don't have permissions to modify user")
-    permission_url = 'users:list'
+    permission_url = reverse_lazy('users:list')
 
     def test_func(self):
         user = self.get_object()
@@ -69,7 +76,7 @@ class UserPermissionMixin(BasePermissionMixin):
 class SuperuserRequiredMixin(BasePermissionMixin):
     """Миксин для проверки прав администратора."""
     permission_message = _("Only superusers can do this.")
-    permission_url = 'home'
+    permission_url = reverse_lazy('home')
 
     def test_func(self):
         return self.request.user.is_superuser
@@ -78,7 +85,7 @@ class SuperuserRequiredMixin(BasePermissionMixin):
 class TaskAuthorRequiredMixin(BasePermissionMixin):
     """Миксин для проверки, является ли пользователь автором задачи."""
     permission_message = _("A task can only be deleted by its author")
-    permission_url = 'tasks:list'
+    permission_url = reverse_lazy('tasks:list')
 
     def test_func(self):
         task = self.get_object()
