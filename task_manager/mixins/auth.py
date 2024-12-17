@@ -17,6 +17,8 @@ class BaseAuthMixin:
 
     def redirect_with_error(self, error_message, url):
         messages.error(self.request, error_message)
+        if not url:
+            url = reverse_lazy('login')
         return redirect(url)
 
     def handle_no_permission(self):
