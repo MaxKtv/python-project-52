@@ -13,12 +13,14 @@ class StatusListView(ListView):
     model = Status
     title = _('Statuses')
     context_object_name = 'statuses'
+    success_url = reverse_lazy('statuses:list')
 
 
 class StatusCreateView(CreateView):
     """Представление для создания статуса"""
     model = Status
     form_class = StatusForm
+    success_url = reverse_lazy('statuses:list')
     success_message = _("Status successfully created")
 
 
@@ -26,13 +28,13 @@ class StatusUpdateView(UpdateView):
     """Представление для обновления статуса"""
     model = Status
     form_class = StatusForm
+    success_url = reverse_lazy('statuses:list')
     success_message = _("Status successfully updated")
 
 
 class StatusDeleteView(DeleteView):
     """Представление для удаления статуса"""
     model = Status
-    template_name = 'statuses/status_confirm_delete.html'
-    protected_message = _("Cannot delete status because it's in use")
-    protected_url = reverse_lazy('statuses:list')
+    success_url = reverse_lazy('statuses:list')
     success_message = _("Status successfully deleted")
+    protected_message = _("Cannot delete status because it's in use")
