@@ -61,5 +61,4 @@ class TaskDeleteView(TaskAuthorRequiredMixin, DeleteView):
     """Представление для удаления задачи"""
     model = Task
     template_name = 'tasks/task_confirm_delete.html'
-    protected_message = _("Cannot delete task because it's in use")
     success_message = _('Task successfully deleted')

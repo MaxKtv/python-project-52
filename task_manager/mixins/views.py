@@ -47,7 +47,6 @@ class DeleteView(BaseViewMixin, DjangoDeleteView):
     template_name_suffix = '_confirm_delete'
     protected_message = _("Cannot delete this object because "
                           "it's referenced by other objects.")
-    protected_url = None
 
     def post(self, request, *args, **kwargs):
         """Обработка POST-запроса"""
@@ -57,4 +56,4 @@ class DeleteView(BaseViewMixin, DjangoDeleteView):
             return response
         except ProtectedError:
             messages.error(request, self.protected_message)
-            return redirect(self.protected_url or self.get_success_url())
+            return redirect(self.get_success_url())

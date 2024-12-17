@@ -12,17 +12,35 @@ SUCCESS_MESSAGES = {
 }
 
 
-class NamedModel(models.Model):
+class NamedModelMeta(models.base.ModelBase):
+    """Метакласс устанавливает verbose_name и verbose_name_plural"""
+
+    def __new__(cls, name, bases, attrs):
+        # Создаем класс модели
+        new_class = super().__new__(cls, name, bases, attrs)
+
+        # Получаем или создаем Meta
+        meta = attrs.get('Meta', type('Meta', (), {}))
+
+        # Устанавливаем значения только если они не определены
+        if not hasattr(meta, 'verbose_name'):
+            meta.verbose_name = _(name)
+        if not hasattr(meta, 'verbose_name_plural'):
+            meta.verbose_name_plural = _(f'{name}s')
+
+        # Обновляем Meta в новом классе
+        new_class._meta.verbose_name = meta.verbose_name
+        new_class._meta.verbose_name_plural = meta.verbose_name_plural
+
+        return new_class
+
+
+class NamedModel(models.Model, metaclass=NamedModelMeta):
     """Базовый класс для моделей с полями name и created_at"""
-    name = models.CharField(
-        max_length=100,
-        verbose_name=_('Name')
-    )
-    created_at = models.DateTimeField(
-        verbose_name=_('Created at'),
-        default=timezone.now,
-        editable=False
-    )
+    name = models.CharField(max_length=100, verbose_name=_('Name'))
+    created_at = models.DateTimeField(default=timezone.now,
+                                      editable=False,
+                                      verbose_name=_('Created at'))
 
     def __str__(self):
         return self.name
@@ -31,10 +49,8 @@ class NamedModel(models.Model):
         """Проверяет, можно ли удалить объект"""
         if hasattr(self, 'task_set') and self.task_set.exists():
             raise models.ProtectedError(
-                _("Cannot delete %(model)s because it's in use") % {
-                    'model': self._meta.verbose_name.lower()
-                },
-                self
+                _("Cannot delete %(model)s because it's in use")
+                % {'model': self._meta.verbose_name.lower()}, self
             )
         return super().delete(*args, **kwargs)
 

@@ -21,27 +21,24 @@ class UserCreateView(CreateView):
     model = User
     form_class = CustomUserCreationForm
     template_name = 'users/register.html'
-    success_url = reverse_lazy('login')  # Оставляем login без пространства имен
+    success_url = reverse_lazy('login')
     success_message = _("User successfully registered")
 
 
-class BaseUserView(UserPermissionMixin):
-    """Базовый класс для представлений пользователя"""
+class UserUpdateView(UserPermissionMixin, UpdateView):
+    """Представление для обновления пользователя"""
     model = User
+    form_class = UserUpdateForm
+    template_name = 'users/user_form.html'
     success_url = reverse_lazy('users:list')
-    permission_url = 'users:list'
+    success_message = _("User successfully updated")
     permission_message = PERMISSION_DENIED_MESSAGE
 
 
-class UserUpdateView(BaseUserView, UpdateView):
-    """Представление для обновления пользователя"""
-    form_class = UserUpdateForm
-    template_name = 'users/user_form.html'
-    success_message = _("User successfully updated")
-
-
-class UserDeleteView(BaseUserView, DeleteView):
+class UserDeleteView(UserPermissionMixin, DeleteView):
     """Представление для удаления пользователя"""
+    model = User
     template_name = 'users/user_confirm_delete.html'
+    success_url = reverse_lazy('users:list')
     success_message = _("User successfully deleted")
-    protected_message = PERMISSION_DENIED_MESSAGE
+    permission_message = PERMISSION_DENIED_MESSAGE

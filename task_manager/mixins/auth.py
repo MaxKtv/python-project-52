@@ -5,58 +5,77 @@ from django.utils.translation import gettext_lazy as _
 
 
 class BaseAuthMixin:
-    """Базовый миксин для аутентификации"""
+    """Базовый миксин для обработки аутентификации и ошибок доступа."""
     permission_message = _("You are not authorized! Please log in.")
     permission_url = 'login'
 
+    def get_login_url(self):
+        return getattr(self, 'login_url', 'login')
+
+    def get_permission_url(self):
+        return getattr(self, 'permission_url', 'login')
+
+    def redirect_with_error(self, error_message, url):
+        messages.error(self.request, error_message)
+        return redirect(url)
+
     def handle_no_permission(self):
-        messages.error(self.request, self.permission_message)
-        return redirect(self.permission_url)
+        """Обработка случаев отсутствия разрешений."""
+        if not self.request.user.is_authenticated:
+            return self.redirect_with_error(
+                _("You are not authorized! Please log in."),
+                self.get_login_url()
+            )
+        return self.redirect_with_error(
+            self.permission_message, self.get_permission_url()
+        )
 
 
 class AuthRequiredMixin(LoginRequiredMixin, BaseAuthMixin):
-    """Миксин для страниц, требующих аутентификации"""
-    pass
+    """Миксин для страниц, требующих аутентификации."""
+    login_url = 'login'
 
 
 class AuthMixin(BaseAuthMixin):
-    """Миксин для проверки аутентификации только для POST запросов"""
+    """Миксин для аутентификации только для POST-запросов."""
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated and request.method != 'GET':
             return self.handle_no_permission()
         return super().dispatch(request, *args, **kwargs)
 
 
-class UserPermissionMixin(BaseAuthMixin, UserPassesTestMixin):
-    """Миксин для проверки прав на управление пользователями"""
-    permission_message = _("You don't have rights to modify another user")
+class BasePermissionMixin(BaseAuthMixin, UserPassesTestMixin):
+    """Базовый миксин для проверки прав."""
+    permission_message = _("You don't have sufficient permissions.")
+
+    def handle_no_permission(self):
+        """Обработка случаев отсутствия разрешений"""
+        return BaseAuthMixin.handle_no_permission(self)
+
+
+class UserPermissionMixin(BasePermissionMixin):
+    """Миксин для проверки прав на управление пользователями."""
+    permission_message = _("Only administrators can modify users.")
     permission_url = 'users:list'
 
-    def dispatch(self, request, *args, **kwargs):
-        self.user_id = kwargs.get('pk')
-        return super().dispatch(request, *args, **kwargs)
-
     def test_func(self):
-        return int(self.user_id) == self.request.user.id
+        """Проверяет, является ли пользователь администратором."""
+        return self.request.user.is_superuser
 
 
-class SuperuserRequiredMixin(BaseAuthMixin, UserPassesTestMixin):
-    """Миксин для проверки прав администратора"""
-    permission_message = _("Only superusers can do this")
+class SuperuserRequiredMixin(BasePermissionMixin):
+    """Миксин для проверки прав администратора."""
+    permission_message = _("Only superusers can do this.")
     permission_url = 'home'
 
     def test_func(self):
         return self.request.user.is_superuser
 
 
-class TaskAuthorRequiredMixin(BaseAuthMixin, UserPassesTestMixin):
-    """Миксин для проверки, является ли пользователь автором задачи"""
+class TaskAuthorRequiredMixin(BasePermissionMixin):
+    """Миксин для проверки, является ли пользователь автором задачи."""
     permission_message = _("A task can only be deleted by its author")
     permission_url = 'tasks:list'
-
-    def dispatch(self, request, *args, **kwargs):
-        self.task_id = kwargs.get('pk')
-        return super().dispatch(request, *args, **kwargs)
 
     def test_func(self):
         task = self.get_object()

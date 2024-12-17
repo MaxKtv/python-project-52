@@ -33,9 +33,5 @@ class Task(NamedModel):
                                     blank=True,
                                     verbose_name=_("Labels"))
 
-    class Meta(NamedModel.Meta):
-        verbose_name = _('Task')
-        verbose_name_plural = _('Tasks')
-
     def get_absolute_url(self):
         return reverse('task_detail', args=[str(self.id)])
