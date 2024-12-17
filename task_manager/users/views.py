@@ -28,6 +28,7 @@ class UserUpdateView(UserPermissionMixin, UpdateView):
     template_name = 'users/user_form.html'
     success_url = reverse_lazy('users:list')
     success_message = _("User successfully updated")
+    permission_url = reverse_lazy('users:list')
 
 
 class UserDeleteView(UserPermissionMixin, DeleteView):
@@ -37,5 +38,7 @@ class UserDeleteView(UserPermissionMixin, DeleteView):
     success_url = reverse_lazy('users:list')
     success_message = _("User successfully deleted")
     protected_url = reverse_lazy('users:list')
+    permission_url = reverse_lazy('users:list')
     protected_message = _("You don't have rights to delete "
                           "this user because its in use")
+
