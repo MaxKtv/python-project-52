@@ -1,14 +1,14 @@
 from django.utils.translation import gettext_lazy as _
-from django_filters.views import FilterView
 from django.views.generic import DetailView
+from django_filters.views import FilterView
 
 from task_manager.mixins import (
     CreateView, UpdateView, DeleteView,
     TaskAuthorRequiredMixin
 )
-from .models import Task
-from .forms import TaskForm
 from .filter import TaskFilter
+from .forms import TaskForm
+from .models import Task
 
 
 class TaskListView(FilterView):
