@@ -3,10 +3,12 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models.deletion import ProtectedError
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import ListView as DjangoListView
-from django.views.generic import CreateView as DjangoCreateView
-from django.views.generic import UpdateView as DjangoUpdateView
-from django.views.generic import DeleteView as DjangoDeleteView
+from django.views.generic import (
+    ListView as DjangoListView,
+    CreateView as DjangoCreateView,
+    UpdateView as DjangoUpdateView,
+    DeleteView as DjangoDeleteView
+)
 
 from .base import BaseViewMixin
 from .forms import FormWidgetMixin
