@@ -1,11 +1,14 @@
-from django.urls import reverse_lazy
 from django.contrib.auth.models import User
-from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
+
 from task_manager.mixins import ListView, CreateView, UpdateView, DeleteView
-from task_manager.mixins.auth import (UserPermissionMixin,
-                                      LoginMixin,
-                                      LogoutMixin)
+from task_manager.mixins.auth import (
+    UserPermissionMixin,
+    LoginMixin,
+    LogoutMixin
+)
 from .forms import CustomUserCreationForm, UserUpdateForm
 
 
