@@ -1,9 +1,21 @@
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.views import LoginView, LogoutView
 from task_manager.mixins import ListView, CreateView, UpdateView, DeleteView
-from task_manager.mixins.auth import UserPermissionMixin
+from task_manager.mixins.auth import UserPermissionMixin, LoginMixin, LogoutMixin
 from .forms import CustomUserCreationForm, UserUpdateForm
+
+
+class CustomLoginView(LoginMixin, LoginView):
+    """Представление для входа пользователя"""
+    template_name = 'users/login.html'
+    redirect_authenticated_user = True
+
+
+class CustomLogoutView(LogoutMixin, LogoutView):
+    """Представление для выхода пользователя"""
+    next_page = 'home'
 
 
 class UserListView(ListView):
@@ -13,10 +25,10 @@ class UserListView(ListView):
 
 
 class UserCreateView(CreateView):
-    """Представление для регистрации пользователя"""
+    """Представление для создания пользователя"""
     model = User
     form_class = CustomUserCreationForm
-    template_name = 'users/register.html'
+    template_name = 'users/user_form.html'
     success_url = reverse_lazy('login')
     success_message = _("User successfully registered")
 
