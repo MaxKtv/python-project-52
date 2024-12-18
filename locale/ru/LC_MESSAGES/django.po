@@ -401,6 +401,14 @@ msgstr "Пользователь успешно обновлён"
 msgid "User successfully deleted"
 msgstr "Пользователь успешно удалён"
 
+#: task_manager/users/views.py:55
+msgid "You are logged in"
+msgstr "Вы залогинены"
+
+#: task_manager/users/views.py:63
+msgid "You are logged out"
+msgstr "Вы разлогинены"
+
 #~ msgid "User successfully created"
 #~ msgstr "Пользователь успешно создан"
 
@@ -416,11 +424,11 @@ msgstr "Пользователь успешно удалён"
 #~ msgid "Log in"
 #~ msgstr "Войти"
 
-#~ msgid "You don't have rights to modify the user"
-#~ msgstr "У вас нет прав для изменения пользователя"
+msgid "You don't have permissions to modify user"
+msgstr "У вас нет прав для изменения другого пользователя."
 
-#~ msgid "You don't have rights to delete the user"
-#~ msgstr "У вас нет прав для удаления пользователя"
+msgid "You don't have rights to delete this user because its in use"
+msgstr "Невозможно удалить пользователя, потому что он используется"
 
 #~ msgid "You are not authorized! Please log in"
 #~ msgstr "Вы не авторизованы! Пожалуйста, выполните вход"
