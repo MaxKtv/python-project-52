@@ -30,7 +30,7 @@ class UserCreateView(CreateView):
     """Представление для создания пользователя"""
     model = User
     form_class = CustomUserCreationForm
-    template_name = 'users/user_form.html'
+    template_name = 'users/register.html'
     success_url = reverse_lazy('login')
     success_message = _("User successfully registered")
 
