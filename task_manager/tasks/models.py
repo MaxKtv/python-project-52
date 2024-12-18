@@ -1,10 +1,11 @@
-from django.db import models
 from django.contrib.auth.models import User
-from task_manager.statuses.models import Status
+from django.db import models
 from django.urls import reverse
-from task_manager.labels.models import Label
 from django.utils.translation import gettext_lazy as _
+
+from task_manager.labels.models import Label
 from task_manager.mixins.base import NamedModel
+from task_manager.statuses.models import Status
 
 
 class Task(NamedModel):
