@@ -1,10 +1,11 @@
 from django import forms
 from django.contrib.auth.models import User
-from task_manager.statuses.models import Status
-from task_manager.labels.models import Label
 from django.utils.translation import gettext_lazy as _
-from .models import Task
+
+from task_manager.labels.models import Label
 from task_manager.mixins.forms import FormWidgetMixin, BaseNameModelForm
+from task_manager.statuses.models import Status
+from .models import Task
 
 
 class TaskForm(FormWidgetMixin, BaseNameModelForm):
