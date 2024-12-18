@@ -51,17 +51,6 @@ class BasePermissionMixin(BaseAuthMixin, UserPassesTestMixin):
     """Базовый миксин для проверки прав."""
     permission_message = _("You don't have sufficient permissions.")
 
-    def handle_no_permission(self):
-        """Обработка случаев отсутствия разрешений"""
-        if not self.request.user.is_authenticated:
-            return self.redirect_with_error(
-                _("You are not authorized! Please log in."),
-                self.get_login_url()
-            )
-        return self.redirect_with_error(
-            self.permission_message, self.get_permission_url()
-        )
-
 
 class UserPermissionMixin(BasePermissionMixin):
     """Миксин для проверки прав на управление пользователями."""
