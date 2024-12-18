@@ -60,6 +60,8 @@ The backend renders the frontend using Django Templates. PostgreSQL is the prima
    ```env
    DATABASE_URL=postgresql://{user}:{password}@{host}:{port}/{db}
    SECRET_KEY=your_secret_key
+   ROLLBAR_ACCESS_TOKEN=your_rollbar_access_token
+   ROLLBAR_ENV=development/production
    ```
 
    If you're using SQLite, omit the `DATABASE_URL` variable and Django will default to SQLite.
