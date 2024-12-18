@@ -2,6 +2,7 @@ import django_filters
 from django import forms
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+
 from task_manager.labels.models import Label
 from task_manager.mixins.forms import FormWidgetMixin
 from task_manager.statuses.models import Status
