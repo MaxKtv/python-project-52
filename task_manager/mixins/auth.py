@@ -90,3 +90,18 @@ class TaskAuthorRequiredMixin(BasePermissionMixin):
     def test_func(self):
         task = self.get_object()
         return task.author == self.request.user
+
+
+class LoginMixin:
+    """Миксин для добавления сообщения об успешном входе."""
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, _("You are logged in"))
+        return response
+
+
+class LogoutMixin:
+    """Миксин для добавления сообщения о выходе."""
+    def dispatch(self, request, *args, **kwargs):
+        messages.info(request, _("You are logged out"))
+        return super().dispatch(request, *args, **kwargs)
