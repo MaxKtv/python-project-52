@@ -8,6 +8,12 @@ from django.utils.translation import gettext_lazy as _
 from task_manager.mixins.forms import FormWidgetMixin
 
 
+def get_user_full_name(obj):
+    """Возвращает полное имя пользователя"""
+    full_name = f"{obj.first_name} {obj.last_name}".strip()
+    return full_name if full_name else obj.username
+
+
 class TaskFilter(django_filters.FilterSet, FormWidgetMixin):
     """Фильтр для задач"""
     request = None  # Добавляем атрибут класса
@@ -48,6 +54,7 @@ class TaskFilter(django_filters.FilterSet, FormWidgetMixin):
             self.filters[field].widget = self.get_form_widget(
                 self.filters[field].queryset
             )
+        self.filters['executor'].field.label_from_instance = get_user_full_name
 
     def filter_self_tasks(self, queryset, name, value):
         """Фильтрует задачи по текущему пользователю как автору"""
