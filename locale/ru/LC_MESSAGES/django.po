@@ -37,7 +37,7 @@ msgstr "Метка успешно создана"
 
 #: task_manager/labels/views.py:28
 msgid "Label successfully updated"
-msgstr "Метка успешно обновлена"
+msgstr "Метка успешно изменена"
 
 #: task_manager/labels/views.py:36
 msgid "Cannot delete label because it's in use"
@@ -74,7 +74,7 @@ msgstr "Создан"
 
 #: task_manager/mixins/base.py:13
 msgid "updated"
-msgstr "Обновлен"
+msgstr "изменен"
 
 #: task_manager/mixins/base.py:14
 msgid "deleted"
@@ -138,7 +138,7 @@ msgstr "Статус успешно создан"
 
 #: task_manager/statuses/views.py:30
 msgid "Status successfully updated"
-msgstr "Статус успешно обновлен"
+msgstr "Статус успешно изменен"
 
 #: task_manager/statuses/views.py:38
 msgid "Cannot delete status because it's in use"
@@ -188,7 +188,7 @@ msgstr "Задача успешно создана"
 
 #: task_manager/tasks/views.py:60
 msgid "Task successfully updated"
-msgstr "Задача успешно обновлена"
+msgstr "Задача успешно изменена"
 
 #: task_manager/tasks/views.py:68
 #, fuzzy
