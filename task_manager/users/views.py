@@ -34,6 +34,9 @@ class UserCreateView(CreateView):
     success_url = reverse_lazy('login')
     success_message = _("User successfully registered")
 
+    def get_success_url(self):
+        return self.success_url
+
 
 class UserUpdateView(UserPermissionMixin, UpdateView):
     """Представление для обновления пользователя"""
