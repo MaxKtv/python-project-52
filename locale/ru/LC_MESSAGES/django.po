@@ -395,7 +395,7 @@ msgstr "Пользователь успешно зарегистрирован"
 
 #: task_manager/users/views.py:37
 msgid "User successfully updated"
-msgstr "Пользователь успешно обновлён"
+msgstr "Пользователь успешно изменен"
 
 #: task_manager/users/views.py:47
 msgid "User successfully deleted"
@@ -436,5 +436,8 @@ msgstr "Невозможно удалить пользователя, потом
 #~ msgid "Language"
 #~ msgstr "Язык"
 
-#~ msgid "Password"
-#~ msgstr "Пароль"
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Сonfirm password"
+msgstr "Подтверждение пароля"

@@ -2,6 +2,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.forms import PasswordChangeForm
 from task_manager.mixins import ListView, CreateView, UpdateView, DeleteView
 from task_manager.mixins.auth import (UserPermissionMixin,
                                       LoginMixin,
@@ -47,6 +48,25 @@ class UserUpdateView(UserPermissionMixin, UpdateView):
     success_message = _("User successfully updated")
     permission_url = reverse_lazy('users:list')
 
+    def get_context_data(self, **kwargs):
+        """Добавляем форму для изменения пароля в контекст"""
+        context = super().get_context_data(**kwargs)
+        context['password_form'] = PasswordChangeForm(user=self.request.user)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        user = self.get_object()
+        password_form = PasswordChangeForm(user=user, data=request.POST)
+
+        if 'password' in request.POST and password_form.is_valid():
+            password_form.save()
+            update_session_auth_hash(request, password_form.user)
+            return self.form_valid(self.get_form())
+
+        if 'password' not in request.POST:
+            return super().post(request, *args, **kwargs)
+
+        return self.form_invalid(self.get_form())
 
 class UserDeleteView(UserPermissionMixin, DeleteView):
     """Представление для удаления пользователя"""
