@@ -1,5 +1,5 @@
-from django.views.generic.base import TemplateView
 from django.http import HttpResponseServerError
+from django.views.generic.base import TemplateView
 import rollbar
 
 
