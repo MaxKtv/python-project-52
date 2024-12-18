@@ -1,8 +1,8 @@
 from django.utils.translation import gettext_lazy as _
 
 from task_manager.mixins import ListView, CreateView, UpdateView, DeleteView
-from .models import Label
 from .forms import LabelForm
+from .models import Label
 
 
 class LabelListView(ListView):
