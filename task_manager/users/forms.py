@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from task_manager.mixins.forms import FormWidgetMixin
 from django.utils.translation import gettext_lazy as _
 
 
@@ -33,12 +32,12 @@ class UserUpdateForm(UserChangeForm):
     password = None  # Убираем стандартное поле пароля
 
     password1 = forms.CharField(
-        label=_("New Password"),
+        label=_("Password"),
         required=False,
         widget=forms.PasswordInput,
     )
     password2 = forms.CharField(
-        label=_("Confirm New Password"),
+        label=_("Confirm password"),
         required=False,
         widget=forms.PasswordInput,
     )

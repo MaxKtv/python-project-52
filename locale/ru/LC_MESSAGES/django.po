@@ -439,5 +439,5 @@ msgstr "Невозможно удалить пользователя, потом
 msgid "Password"
 msgstr "Пароль"
 
-msgid "Сonfirm password"
+msgid "Confirm password"
 msgstr "Подтверждение пароля"
