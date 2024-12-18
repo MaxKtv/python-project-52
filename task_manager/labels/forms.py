@@ -1,5 +1,5 @@
-from .models import Label
 from task_manager.mixins.forms import BaseNameModelForm
+from .models import Label
 
 
 class LabelForm(BaseNameModelForm):
