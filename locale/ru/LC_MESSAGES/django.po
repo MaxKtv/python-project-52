@@ -253,7 +253,7 @@ msgstr "Создать метку"
 #: task_manager/templates/users/user_form.html:20
 #: task_manager/templates/users/user_list.html:27
 msgid "Update"
-msgstr "Обновить"
+msgstr "Изменить"
 
 #: task_manager/templates/labels/label_form.html:10
 #: task_manager/templates/statuses/status_form.html:11
