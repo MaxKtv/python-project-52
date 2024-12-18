@@ -10,17 +10,7 @@
     <div class="card-body bg-light">
         <form class="form-inline center" method="get">
             {% bootstrap_field filter.form.status %}
-            <label for="id_executor" class="form-label">{{ filter.form.executor.label }}</label>
-                <div>
-                    <select name="executor" class="form-select">
-                        <option value="">---------</option>
-                        {% for user in filter.form.executor.field.queryset %}
-                            <option value="{{ user.id }}" {% if user.id == filter.form.executor.value %}selected{% endif %}>
-                                {{ user.get_full_name }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
+            {% bootstrap_field filter.form.executor %}
             {% bootstrap_field filter.form.labels %}
             
             <div class="mb-3">
@@ -62,7 +52,7 @@
             </td>
             <td>{{ task.status }}</td>
             <td>{{ task.author.first_name }} {{ task.author.last_name }}</td>
-            <td>{{ task.executor.first_name }} {{ task.executor.last_name }}</td></td>
+            <td>{{ task.executor.get_full_name }}</td>
             <td>{{ task.created_at|date:"d.m.Y H:i" }}</td>
             <td>
                 <a href="{% url 'tasks:update' task.pk %}" class="btn btn-info">{% trans "Update" %}</a>
