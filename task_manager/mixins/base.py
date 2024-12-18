@@ -96,7 +96,8 @@ class BaseViewMixin:
         """URL для перенаправления после успешной операции"""
         if not hasattr(self, '_success_url'):
             app_label = self.model._meta.app_label
-            if app_label == 'users':
+            model_name = self.model._meta.model_name
+            if app_label == 'auth' and model_name == 'user':
                 self._success_url = reverse_lazy('users:list')
             else:
                 self._success_url = reverse_lazy(f'{app_label}:list')
