@@ -17,17 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from task_manager.views import HomeView
-from django.contrib.auth.views import LoginView, LogoutView
-from task_manager.users.views import UserCreateView
+from task_manager.users.views import (
+    UserCreateView, CustomLoginView, CustomLogoutView
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view(), name='home'),
-    path('login/', LoginView.as_view(
-        template_name='users/login.html',
-        redirect_authenticated_user=True
-    ), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('logout/', CustomLogoutView.as_view(), name='logout'),
     path('register/', UserCreateView.as_view(), name='register'),
     path('users/', include('task_manager.users.urls')),
     path('statuses/', include('task_manager.statuses.urls')),
