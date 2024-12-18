@@ -1,20 +1,14 @@
 from .auth import (
     AuthMixin,
-    UserPermissionMixin,
     SuperuserRequiredMixin,
-    TaskAuthorRequiredMixin
+    TaskAuthorRequiredMixin,
+    UserPermissionMixin,
 )
-from .forms import FormWidgetMixin, BaseNameModelForm
 from .base import BaseViewMixin, NamedModel
+from .forms import BaseNameModelForm, FormWidgetMixin
 from .testing import BaseCRUDTest
 from .urls import get_crud_urlpatterns
-from .views import (
-    ListView,
-    CreateView,
-    UpdateView,
-    DeleteView
-)
-
+from .views import CreateView, DeleteView, ListView, UpdateView
 
 __all__ = [
     'AuthMixin',

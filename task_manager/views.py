@@ -1,6 +1,6 @@
+import rollbar
 from django.http import HttpResponseServerError
 from django.views.generic.base import TemplateView
-import rollbar
 
 
 class HomeView(TemplateView):

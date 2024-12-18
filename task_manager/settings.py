@@ -10,13 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
-import os
 import dj_database_url
-from dotenv import load_dotenv
 import rollbar
-
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -162,6 +161,7 @@ AUTHENTICATION_BACKENDS = [
 
 # Messages
 from django.contrib.messages import constants as messages
+
 MESSAGE_TAGS = {
     messages.DEBUG: 'info',
     messages.INFO: 'info',

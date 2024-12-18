@@ -2,7 +2,6 @@ from django import forms
 from django.forms import Select
 from django.utils.translation import gettext_lazy as _
 
-
 # Общие атрибуты виджетов
 FORM_CONTROL_ATTRS = {'class': 'form-control'}
 

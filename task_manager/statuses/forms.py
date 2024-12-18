@@ -1,5 +1,6 @@
-from .models import Status
 from task_manager.mixins.forms import BaseNameModelForm
+
+from .models import Status
 
 
 class StatusForm(BaseNameModelForm):

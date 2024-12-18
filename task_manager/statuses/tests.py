@@ -1,5 +1,5 @@
-from task_manager.statuses.models import Status
 from task_manager.mixins import BaseCRUDTest
+from task_manager.statuses.models import Status
 
 
 class StatusCRUDTest(BaseCRUDTest):

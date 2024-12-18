@@ -1,4 +1,5 @@
 from task_manager.mixins.urls import get_crud_urlpatterns
+
 from . import views
 
 app_name = 'users'

@@ -1,8 +1,12 @@
 from django.urls import path
-
 from task_manager.mixins.urls import get_crud_urlpatterns
+
 from .views import (
-    TaskListView, TaskDetailView, TaskCreateView, TaskUpdateView, TaskDeleteView
+    TaskCreateView,
+    TaskDeleteView,
+    TaskDetailView,
+    TaskListView,
+    TaskUpdateView,
 )
 
 app_name = 'tasks'

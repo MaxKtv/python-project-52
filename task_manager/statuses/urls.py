@@ -1,8 +1,11 @@
 from task_manager.mixins.urls import get_crud_urlpatterns
-from .views import (StatusListView,
-                    StatusCreateView,
-                    StatusUpdateView,
-                    StatusDeleteView)
+
+from .views import (
+    StatusCreateView,
+    StatusDeleteView,
+    StatusListView,
+    StatusUpdateView,
+)
 
 app_name = 'statuses'
 

@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
+from task_manager.mixins import CreateView, DeleteView, ListView, UpdateView
 
-from task_manager.mixins import ListView, CreateView, UpdateView, DeleteView
 from .forms import LabelForm
 from .models import Label
 

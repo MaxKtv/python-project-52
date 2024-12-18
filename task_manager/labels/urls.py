@@ -1,8 +1,11 @@
 from task_manager.mixins.urls import get_crud_urlpatterns
-from .views import (LabelListView,
-                    LabelCreateView,
-                    LabelUpdateView,
-                    LabelDeleteView)
+
+from .views import (
+    LabelCreateView,
+    LabelDeleteView,
+    LabelListView,
+    LabelUpdateView,
+)
 
 app_name = 'labels'
 
