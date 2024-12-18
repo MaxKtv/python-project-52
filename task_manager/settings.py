@@ -15,6 +15,7 @@ from pathlib import Path
 
 import dj_database_url
 import rollbar
+from django.contrib.messages import constants as messages
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -160,7 +161,6 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Messages
-from django.contrib.messages import constants as messages
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'info',
