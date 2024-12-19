@@ -3,8 +3,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from task_manager.labels.models import Label
 from task_manager.base import NamedModel
+from task_manager.labels.models import Label
 from task_manager.statuses.models import Status
 
 
@@ -31,7 +31,9 @@ class Task(NamedModel):
         verbose_name=_("Executor"),
     )
 
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=_("Created at")
+    )
 
     labels = models.ManyToManyField(Label, blank=True, verbose_name=_("Labels"))
 

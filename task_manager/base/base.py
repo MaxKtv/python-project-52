@@ -1,9 +1,8 @@
+from django import forms
 from django.db import models
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django import forms
-
 
 # Константы для сообщений
 SUCCESS_MESSAGES = {
@@ -75,9 +74,13 @@ class BaseView:
         if self.title is None:
             model_name = self.model._meta.verbose_name
             if hasattr(self, "object") and self.object:
-                self.title = _("Edit {model_name}").format(model_name=model_name)
+                self.title = _("Edit {model_name}").format(
+                    model_name=model_name
+                )
             else:
-                self.title = _("Create {model_name}").format(model_name=model_name)
+                self.title = _("Create {model_name}").format(
+                    model_name=model_name
+                )
         context["title"] = self.title
         return context
 
@@ -107,10 +110,12 @@ class BaseView:
         """Get success message for the view."""
         if self.success_message is None:
             model_name = self.model._meta.verbose_name
-            action = SUCCESS_MESSAGES.get(self.action_type, SUCCESS_MESSAGES["create"])
-            self.success_message = _("{model_name} successfully " "{action}").format(
-                model_name=model_name, action=action
+            action = SUCCESS_MESSAGES.get(
+                self.action_type, SUCCESS_MESSAGES["create"]
             )
+            self.success_message = _(
+                "{model_name} successfully " "{action}"
+            ).format(model_name=model_name, action=action)
         return self.success_message
 
 

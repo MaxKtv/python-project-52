@@ -3,15 +3,15 @@ from .auth import (
     TaskAuthorRequiredMixin,
     UserPermissionMixin,
 )
-from .base import BaseView, NamedModel, BaseNameModelForm
+from .base import BaseNameModelForm, BaseView, NamedModel
 from .base_tests import BaseCRUDTest
 from .base_views import (
+    BaseLoginView,
+    BaseLogoutView,
     CreateView,
     DeleteView,
     ListView,
     UpdateView,
-    BaseLoginView,
-    BaseLogoutView,
 )
 
 __all__ = [

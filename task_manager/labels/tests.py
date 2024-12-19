@@ -1,5 +1,5 @@
-from task_manager.labels.models import Label
 from task_manager.base import BaseCRUDTest
+from task_manager.labels.models import Label
 
 
 class LabelCRUDTest(BaseCRUDTest):

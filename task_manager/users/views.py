@@ -4,12 +4,12 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from task_manager.base import (
+    BaseLoginView,
+    BaseLogoutView,
     CreateView,
     DeleteView,
     ListView,
     UpdateView,
-    BaseLoginView,
-    BaseLogoutView,
     UserPermissionMixin,
 )
 

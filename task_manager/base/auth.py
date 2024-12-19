@@ -1,8 +1,8 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.shortcuts import redirect
-from django.contrib import messages
 
 
 class BaseAuth:
@@ -27,7 +27,8 @@ class BaseAuth:
         """Обработка случаев отсутствия разрешений."""
         if not self.request.user.is_authenticated:
             return self.redirect_with_error(
-                _("You are not authorized! Please log in."), self.get_login_url()
+                _("You are not authorized! Please log in."),
+                self.get_login_url(),
             )
         return self.redirect_with_error(
             self.permission_message, self.get_permission_url()

@@ -6,9 +6,9 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView as DjangoCreateView
 from django.views.generic import DeleteView as DjangoDeleteView
 from django.views.generic import ListView as DjangoListView
-from . import BaseView
-
 from django.views.generic import UpdateView as DjangoUpdateView
+
+from . import BaseView
 
 
 class ListView(BaseView, DjangoListView):

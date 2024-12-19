@@ -11,7 +11,9 @@ class TaskCRUDTest(BaseCRUDTest):
     base_url_name = "task"
 
     def setUp(self):
-        self.user = User.objects.create_user(username="testuser", password="password")
+        self.user = User.objects.create_user(
+            username="testuser", password="password"
+        )
         self.client.login(username="testuser", password="password")
         self.status = Status.objects.create(name="Новый")
         self.valid_data = {
@@ -34,7 +36,9 @@ class TaskCRUDTest(BaseCRUDTest):
 
 class TaskFilterTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="testuser", password="password")
+        self.user = User.objects.create_user(
+            username="testuser", password="password"
+        )
         self.client.login(username="testuser", password="password")
         self.status = Status.objects.create(name="Новый")
         self.label = Label.objects.create(name="Bug")

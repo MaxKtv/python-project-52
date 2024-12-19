@@ -4,8 +4,8 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from task_manager.labels.models import Label
-from task_manager.tools import get_form_widget, get_user_full_name
 from task_manager.statuses.models import Status
+from task_manager.tools import get_form_widget, get_user_full_name
 
 from .models import Task
 
@@ -47,7 +47,9 @@ class TaskFilter(django_filters.FilterSet):
 
         # Устанавливаем виджеты для фильтров
         for field in ["status", "executor", "labels"]:
-            self.filters[field].widget = get_form_widget(self.filters[field].queryset)
+            self.filters[field].widget = get_form_widget(
+                self.filters[field].queryset
+            )
         self.filters["executor"].field.label_from_instance = get_user_full_name
 
     def filter_self_tasks(self, queryset, name, value):

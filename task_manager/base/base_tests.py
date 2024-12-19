@@ -12,14 +12,18 @@ class BaseCRUDTest(TestCase):
     invalid_data = {}
 
     def setUp(self):
-        self.user = User.objects.create_user(username="testuser", password="testpass")
+        self.user = User.objects.create_user(
+            username="testuser", password="testpass"
+        )
         self.client.force_login(self.user)
         self.instance = self.model.objects.create(**self.valid_data)
 
     def get_url(self, action, args=None):
         """Получает URL для конкретного действия"""
         url_name = (
-            self.base_url_name if action == "list" else f"{self.base_url_name}_{action}"
+            self.base_url_name
+            if action == "list"
+            else f"{self.base_url_name}_{action}"
         )
         return reverse(url_name, args=args)
 
@@ -37,7 +41,9 @@ class BaseCRUDTest(TestCase):
     def assert_view_response(self, response, template_suffix):
         """Проверяет ответ представления"""
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, self.get_template_path(template_suffix))
+        self.assertTemplateUsed(
+            response, self.get_template_path(template_suffix)
+        )
 
     def assert_redirect_response(self, response, redirect_url=None):
         """Проверяет ответ с перенаправлением"""
@@ -66,7 +72,9 @@ class BaseCRUDTest(TestCase):
 
     def test_update_view(self):
         """Тестирование отображения формы редактирования"""
-        response = self.client.get(self.get_url("update", args=[self.instance.pk]))
+        response = self.client.get(
+            self.get_url("update", args=[self.instance.pk])
+        )
         self.assert_view_response(response, "form")
 
     def test_update(self):
@@ -82,12 +90,16 @@ class BaseCRUDTest(TestCase):
 
     def test_delete_view(self):
         """Тестирование отображения страницы удаления"""
-        response = self.client.get(self.get_url("delete", args=[self.instance.pk]))
+        response = self.client.get(
+            self.get_url("delete", args=[self.instance.pk])
+        )
         self.assert_view_response(response, "confirm_delete")
 
     def test_delete(self):
         """Тестирование удаления объекта"""
-        response = self.client.post(self.get_url("delete", args=[self.instance.pk]))
+        response = self.client.post(
+            self.get_url("delete", args=[self.instance.pk])
+        )
         self.assert_redirect_response(response)
         self.assertEqual(self.model.objects.count(), 0)
 
@@ -102,7 +114,8 @@ class BaseCRUDTest(TestCase):
             description="Test Description",
             status=self.instance
             if isinstance(
-                self.instance, task_model._meta.get_field("status").related_model
+                self.instance,
+                task_model._meta.get_field("status").related_model,
             )
             else None,
             executor=self.user,
@@ -114,7 +127,9 @@ class BaseCRUDTest(TestCase):
             else None,
         )
 
-        response = self.client.post(self.get_url("delete", args=[self.instance.pk]))
+        response = self.client.post(
+            self.get_url("delete", args=[self.instance.pk])
+        )
         self.assert_redirect_response(response)
         self.assertEqual(self.model.objects.count(), 1)
         messages = list(response.wsgi_request._messages)
@@ -133,4 +148,6 @@ class BaseCRUDTest(TestCase):
         for action, args in urls:
             response = self.client.get(self.get_url(action, args))
             self.assertEqual(response.status_code, 302)
-            self.assertRedirects(response, f"/login/?next={self.get_url(action, args)}")
+            self.assertRedirects(
+                response, f"/login/?next={self.get_url(action, args)}"
+            )
