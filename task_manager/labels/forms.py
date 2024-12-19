@@ -1,4 +1,4 @@
-from task_manager.mixins.forms import BaseNameModelForm
+from task_manager.base import BaseNameModelForm
 
 from .models import Label
 
@@ -6,4 +6,4 @@ from .models import Label
 class LabelForm(BaseNameModelForm):
     class Meta:
         model = Label
-        fields = ['name']
+        fields = ["name"]

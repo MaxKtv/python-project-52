@@ -1,4 +1,4 @@
-from task_manager.mixins.urls import get_crud_urlpatterns
+from task_manager.tools import get_crud_urlpatterns
 
 from .views import (
     LabelCreateView,
@@ -7,12 +7,8 @@ from .views import (
     LabelUpdateView,
 )
 
-app_name = 'labels'
+app_name = "labels"
 
 urlpatterns = get_crud_urlpatterns(
-    LabelListView,
-    LabelCreateView,
-    LabelUpdateView,
-    LabelDeleteView,
-    ''
+    LabelListView, LabelCreateView, LabelUpdateView, LabelDeleteView, ""
 )

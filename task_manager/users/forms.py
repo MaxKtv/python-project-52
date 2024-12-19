@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
-        fields = UserCreationForm.Meta.fields + ('first_name', 'last_name')
+        fields = UserCreationForm.Meta.fields + ("first_name", "last_name")
         labels = {
             "username": _("Username"),
         }
@@ -19,7 +19,7 @@ class CustomUserUpdateForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email']
+        fields = ["username", "first_name", "last_name", "email"]
 
     def clean_password(self):
         # Убеждаемся, что поле пароля полностью исключено
@@ -44,12 +44,12 @@ class UserUpdateForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name']
+        fields = ["username", "first_name", "last_name"]
 
     def clean(self):
         cleaned_data = super().clean()
-        password1 = cleaned_data.get('password1')
-        password2 = cleaned_data.get('password2')
+        password1 = cleaned_data.get("password1")
+        password2 = cleaned_data.get("password2")
 
         if password1 or password2:
             if password1 != password2:
@@ -59,7 +59,7 @@ class UserUpdateForm(UserChangeForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        password1 = self.cleaned_data.get('password1')
+        password1 = self.cleaned_data.get("password1")
 
         if password1:
             user.set_password(password1)

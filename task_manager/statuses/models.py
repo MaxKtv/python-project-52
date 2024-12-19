@@ -1,4 +1,4 @@
-from task_manager.mixins.base import NamedModel
+from task_manager.base.base import NamedModel
 
 
 class Status(NamedModel):

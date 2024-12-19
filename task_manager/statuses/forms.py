@@ -1,4 +1,4 @@
-from task_manager.mixins.forms import BaseNameModelForm
+from task_manager.base import BaseNameModelForm
 
 from .models import Status
 
@@ -6,4 +6,4 @@ from .models import Status
 class StatusForm(BaseNameModelForm):
     class Meta:
         model = Status
-        fields = ['name']
+        fields = ["name"]

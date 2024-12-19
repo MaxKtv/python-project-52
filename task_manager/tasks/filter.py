@@ -4,65 +4,57 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from task_manager.labels.models import Label
-from task_manager.mixins.forms import FormWidgetMixin
+from task_manager.tools import get_form_widget, get_user_full_name
 from task_manager.statuses.models import Status
 
 from .models import Task
 
 
-def get_user_full_name(obj):
-    """Возвращает полное имя пользователя"""
-    full_name = f"{obj.first_name} {obj.last_name}".strip()
-    return full_name if full_name else obj.username
-
-
-class TaskFilter(django_filters.FilterSet, FormWidgetMixin):
+class TaskFilter(django_filters.FilterSet):
     """Фильтр для задач"""
+
     request = None  # Добавляем атрибут класса
 
     status = django_filters.ModelChoiceFilter(
         queryset=Status.objects.all(),
-        label=_('Status'),
-        empty_label='---------',
+        label=_("Status"),
+        empty_label="---------",
     )
 
     executor = django_filters.ModelChoiceFilter(
         queryset=get_user_model().objects.all(),
-        label=_('Executor'),
-        empty_label='---------',
+        label=_("Executor"),
+        empty_label="---------",
     )
 
     labels = django_filters.ModelChoiceFilter(
         queryset=Label.objects.all(),
-        label=_('Label'),
-        empty_label='---------',
+        label=_("Label"),
+        empty_label="---------",
     )
 
     self_tasks = django_filters.BooleanFilter(
-        label=_('Only my tasks'),
-        method='filter_self_tasks',
-        widget=forms.CheckboxInput(attrs={
-            'class': 'form-check-input',
-            'role': 'switch'
-        })
+        label=_("Only my tasks"),
+        method="filter_self_tasks",
+        widget=forms.CheckboxInput(
+            attrs={"class": "form-check-input", "role": "switch"}
+        ),
     )
 
     def __init__(self, *args, **kwargs):
-        TaskFilter.request = kwargs.pop('request', None)
+        TaskFilter.request = kwargs.pop("request", None)
         super().__init__(*args, **kwargs)
 
         # Устанавливаем виджеты для фильтров
-        for field in ['status', 'executor', 'labels']:
-            self.filters[field].widget = self.get_form_widget(
-                self.filters[field].queryset
-            )
-        self.filters['executor'].field.label_from_instance = get_user_full_name
+        for field in ["status", "executor", "labels"]:
+            self.filters[field].widget = get_form_widget(self.filters[field].queryset)
+        self.filters["executor"].field.label_from_instance = get_user_full_name
 
     def filter_self_tasks(self, queryset, name, value):
         """Фильтрует задачи по текущему пользователю как автору"""
         if not TaskFilter.request:  # Используем атрибут класса
             return queryset
-        if not hasattr(TaskFilter.request, 'user'):  # Используем атрибут класса
+        if not hasattr(TaskFilter.request, "user"):  # Используем атрибут класса
             return queryset
         if value and TaskFilter.request.user.is_authenticated:
             filtered = queryset.filter(author_id=TaskFilter.request.user.id)
@@ -71,5 +63,5 @@ class TaskFilter(django_filters.FilterSet, FormWidgetMixin):
 
     class Meta:
         model = Task
-        fields = ['status', 'executor', 'labels', 'self_tasks']
-        order_by = ['id']  # Добавляем сортировку по умолчанию
+        fields = ["status", "executor", "labels", "self_tasks"]
+        order_by = ["id"]  # Добавляем сортировку по умолчанию
