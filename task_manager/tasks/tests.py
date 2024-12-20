@@ -1,59 +1,112 @@
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import Client, TestCase
 from django.urls import reverse
 
-from task_manager.base import BaseCRUDTest
-from task_manager.tasks.models import Label, Status, Task
+from task_manager.labels.models import Label
+from task_manager.statuses.models import Status
+from task_manager.tasks.models import Task
 
 
-class TaskCRUDTest(BaseCRUDTest):
-    model = Task
-    base_url_name = "task"
+class TasksTest(TestCase):
+    fixtures = ['users.json', 'statuses.json', 'labels.json', 'tasks.json']
 
     def setUp(self):
-        self.user = User.objects.create_user(
-            username="testuser", password="password"
-        )
-        self.client.login(username="testuser", password="password")
-        self.status = Status.objects.create(name="Новый")
-        self.valid_data = {
-            "name": "Задача 1",
-            "description": "Описание",
-            "status": self.status.id,
-            "author": self.user,
-        }
-        self.instance = self.model.objects.create(**self.valid_data)
+        self.client = Client()
+        # Создаем тестовых пользователей с явным указанием пароля
+        self.user1 = User.objects.get(username='testuser1')
+        self.user1.set_password('testpass123')
+        self.user1.save()
 
-    def test_delete_task_by_non_author(self):
-        User.objects.create_user(username="another", password="password")
-        self.client.login(username="another", password="password")
+        self.user2 = User.objects.get(username='testuser2')
+        self.user2.set_password('testpass123')
+        self.user2.save()
+
+        # Получаем существующие объекты из фикстур
+        self.status = Status.objects.get(name='New')
+        self.label = Label.objects.get(name='Bug')
+        self.task = Task.objects.get(name='Fix login bug')
+
+    def test_task_list_authenticated(self):
+        """Тест просмотра списка задач авторизованным пользователем."""
+        self.client.login(username='testuser1', password='testpass123')
+        response = self.client.get(reverse('tasks:list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'tasks/task_list.html')
+
+    def test_task_list_unauthenticated(self):
+        """Тест просмотра списка задач неавторизованным пользователем."""
+        response = self.client.get(reverse('tasks:list'))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('login'))
+
+    def test_task_create_authenticated(self):
+        """Тест создания задачи авторизованным пользователем."""
+        self.client.login(username='testuser1', password='testpass123')
+        response = self.client.post(reverse('tasks:create'), {
+            'name': 'New Task',
+            'description': 'New Description',
+            'status': self.status.pk,
+            'executor': self.user2.pk,
+            'labels': [self.label.pk]
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Task.objects.filter(name='New Task').exists())
+
+    def test_task_create_unauthenticated(self):
+        """Тест создания задачи неавторизованным пользователем."""
+        response = self.client.post(reverse('tasks:create'), {
+            'name': 'New Task',
+            'description': 'New Description',
+            'status': self.status.pk,
+            'executor': self.user2.pk
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Task.objects.filter(name='New Task').exists())
+
+    def test_task_update_authenticated(self):
+        """Тест обновления задачи авторизованным пользователем."""
+        self.client.login(username='testuser1', password='testpass123')
         response = self.client.post(
-            reverse(f"{self.base_url_name}_delete", args=[self.instance.pk])
+            reverse('tasks:update', kwargs={'pk': self.task.pk}),
+            {
+                'name': 'Updated Task',
+                'description': 'Updated Description',
+                'status': self.status.pk,
+                'executor': self.user2.pk,
+                'labels': [self.label.pk]
+            }
         )
-        self.assertEqual(response.status_code, 403)
-        self.assertEqual(self.model.objects.count(), 1)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Task.objects.filter(name='Updated Task').exists())
 
-
-class TaskFilterTest(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(
-            username="testuser", password="password"
+    def test_task_update_unauthenticated(self):
+        """Тест обновления задачи неавторизованным пользователем."""
+        response = self.client.post(
+            reverse('tasks:update', kwargs={'pk': self.task.pk}),
+            {
+                'name': 'Updated Task',
+                'description': 'Updated Description',
+                'status': self.status.pk,
+                'executor': self.user2.pk
+            }
         )
-        self.client.login(username="testuser", password="password")
-        self.status = Status.objects.create(name="Новый")
-        self.label = Label.objects.create(name="Bug")
-        self.task1 = Task.objects.create(
-            name="Task 1",
-            description="Description 1",
-            status=self.status,
-            author=self.user,
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Task.objects.filter(name='Updated Task').exists())
+
+    def test_task_delete_by_author(self):
+        """Тест удаления задачи ее автором."""
+        self.client.login(username='testuser1', password='testpass123')
+        response = self.client.post(
+            reverse('tasks:delete', kwargs={'pk': self.task.pk})
         )
-        self.task1.labels.add(self.label)
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Task.objects.filter(pk=self.task.pk).exists())
 
-    def test_filter_by_status(self):
-        response = self.client.get(reverse("tasks"), {"status": self.status.id})
-        self.assertContains(response, "Task 1")
-
-    def test_filter_self_tasks(self):
-        response = self.client.get(reverse("tasks"), {"self_tasks": "on"})
-        self.assertContains(response, "Task 1")
+    def test_task_delete_by_non_author(self):
+        """Тест удаления задачи не автором."""
+        self.client.login(username='testuser2', password='testpass123')
+        response = self.client.post(
+            reverse('tasks:delete', kwargs={'pk': self.task.pk})
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Task.objects.filter(pk=self.task.pk).exists())

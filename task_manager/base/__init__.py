@@ -4,7 +4,6 @@ from task_manager.base.auth import (
     UserPermissionMixin,
 )
 from task_manager.base.base import BaseNameModelForm, BaseView, NamedModel
-from task_manager.base.base_tests import BaseCRUDTest
 from task_manager.base.base_views import (
     BaseLoginView,
     BaseLogoutView,
@@ -21,7 +20,6 @@ __all__ = [
     "BaseNameModelForm",
     "BaseView",
     "NamedModel",
-    "BaseCRUDTest",
     "ListView",
     "CreateView",
     "UpdateView",
