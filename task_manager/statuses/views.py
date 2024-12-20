@@ -1,13 +1,19 @@
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
-from task_manager.base import CreateView, DeleteView, ListView, UpdateView
+from task_manager.base import (
+    AuthPermissionMixin,
+    CreateView,
+    DeleteView,
+    ListView,
+    UpdateView,
+)
 
 from .forms import StatusForm
 from .models import Status
 
 
-class StatusListView(ListView):
+class StatusListView(AuthPermissionMixin, ListView):
     """Представление для просмотра списка статусов"""
 
     model = Status
@@ -16,7 +22,7 @@ class StatusListView(ListView):
     success_url = reverse_lazy("statuses:list")
 
 
-class StatusCreateView(CreateView):
+class StatusCreateView(AuthPermissionMixin, CreateView):
     """Представление для создания статуса"""
 
     model = Status
@@ -25,7 +31,7 @@ class StatusCreateView(CreateView):
     success_message = _("Status successfully created")
 
 
-class StatusUpdateView(UpdateView):
+class StatusUpdateView(AuthPermissionMixin, UpdateView):
     """Представление для обновления статуса"""
 
     model = Status
@@ -34,7 +40,7 @@ class StatusUpdateView(UpdateView):
     success_message = _("Status successfully updated")
 
 
-class StatusDeleteView(DeleteView):
+class StatusDeleteView(AuthPermissionMixin, DeleteView):
     """Представление для удаления статуса"""
 
     model = Status

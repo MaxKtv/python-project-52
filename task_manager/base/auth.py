@@ -4,11 +4,13 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
+NOT_AUTHORIZED_MESSAGE = _("You are not authorized! Please log in.")
+
 
 class BaseAuth:
     """Базовый класс для обработки аутентификации и ошибок доступа."""
 
-    permission_message = _("You are not authorized! Please log in.")
+    permission_message = NOT_AUTHORIZED_MESSAGE
     permission_url = reverse_lazy("login")
 
     def get_login_url(self):
@@ -27,27 +29,23 @@ class BaseAuth:
         """Обработка случаев отсутствия разрешений."""
         if not self.request.user.is_authenticated:
             return self.redirect_with_error(
-                _("You are not authorized! Please log in."),
-                self.get_login_url(),
+                NOT_AUTHORIZED_MESSAGE, self.get_login_url(),
             )
         return self.redirect_with_error(
             self.permission_message, self.get_permission_url()
         )
 
 
-class AuthMixin(BaseAuth):
-    """Миксин для аутентификации только для POST-запросов."""
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated and request.method != "GET":
-            return self.handle_no_permission()
-        return super().dispatch(request, *args, **kwargs)
-
-
 class BasePermissionMixin(BaseAuth, UserPassesTestMixin):
     """Базовый миксин для проверки прав."""
+    def test_func(self):
+        pass
 
-    permission_message = _("You don't have sufficient permissions.")
+
+class AuthPermissionMixin(BasePermissionMixin):
+    """Миксин для проверки аутентификации."""
+    def test_func(self):
+        return self.request.user.is_authenticated
 
 
 class UserPermissionMixin(BasePermissionMixin):
@@ -61,7 +59,7 @@ class UserPermissionMixin(BasePermissionMixin):
         return self.request.user == user
 
 
-class TaskAuthorRequiredMixin(BasePermissionMixin):
+class AuthorPermissionMixin(BasePermissionMixin):
     """Миксин для проверки, является ли пользователь автором задачи."""
 
     permission_message = _("A task can only be deleted by its author")

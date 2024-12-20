@@ -3,9 +3,10 @@ from django.views.generic import DetailView
 from django_filters.views import FilterView
 
 from task_manager.base import (
+    AuthorPermissionMixin,
+    AuthPermissionMixin,
     CreateView,
     DeleteView,
-    TaskAuthorRequiredMixin,
     UpdateView,
 )
 
@@ -14,7 +15,7 @@ from .forms import TaskForm
 from .models import Task
 
 
-class TaskListView(FilterView):
+class TaskListView(AuthPermissionMixin, FilterView):
     """Представление для просмотра списка задач"""
 
     model = Task
@@ -34,7 +35,7 @@ class TaskListView(FilterView):
         return kwargs
 
 
-class TaskDetailView(DetailView):
+class TaskDetailView(AuthPermissionMixin, DetailView):
     """Представление для просмотра задачи"""
 
     model = Task
@@ -42,7 +43,7 @@ class TaskDetailView(DetailView):
     context_object_name = "task"
 
 
-class TaskCreateView(CreateView):
+class TaskCreateView(AuthPermissionMixin, CreateView):
     """Представление для создания задачи"""
 
     model = Task
@@ -55,7 +56,7 @@ class TaskCreateView(CreateView):
         return super().form_valid(form)
 
 
-class TaskUpdateView(UpdateView):
+class TaskUpdateView(AuthPermissionMixin, UpdateView):
     """Представление для обновления задачи"""
 
     model = Task
@@ -64,7 +65,7 @@ class TaskUpdateView(UpdateView):
     success_message = _("Task successfully updated")
 
 
-class TaskDeleteView(TaskAuthorRequiredMixin, DeleteView):
+class TaskDeleteView(AuthorPermissionMixin, DeleteView):
     """Представление для удаления задачи"""
 
     model = Task

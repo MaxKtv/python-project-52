@@ -70,7 +70,7 @@ msgstr "Задачу может удалить только ее автор"
 
 #: task_manager/mixins/base.py:12
 msgid "created"
-msgstr "Создан"
+msgstr "создан"
 
 #: task_manager/mixins/base.py:13
 msgid "updated"
@@ -429,9 +429,6 @@ msgstr "У вас нет прав для изменения другого по�
 
 msgid "You don't have rights to delete this user because its in use"
 msgstr "Невозможно удалить пользователя, потому что он используется"
-
-#~ msgid "You are not authorized! Please log in"
-#~ msgstr "Вы не авторизованы! Пожалуйста, выполните вход"
 
 #~ msgid "Language"
 #~ msgstr "Язык"

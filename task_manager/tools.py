@@ -1,6 +1,7 @@
 from django.forms import Select
 from django.urls import path
 
+
 FORM_CONTROL_ATTRS = {"class": "form-control"}
 
 
@@ -27,3 +28,11 @@ def get_user_full_name(obj):
     """Возвращает полное имя пользователя"""
     full_name = f"{obj.first_name} {obj.last_name}".strip()
     return full_name if full_name else obj.username
+
+
+def is_in_tasks(obj, named_model):
+    """Проверка на наличие объекта в задачах"""
+    if isinstance(obj, named_model):
+        if hasattr(obj, "task_set") and obj.task_set.exists():
+            return True
+    return False

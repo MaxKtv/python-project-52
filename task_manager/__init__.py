@@ -3,6 +3,7 @@ from task_manager.tools import (
     get_crud_urlpatterns,
     get_form_widget,
     get_user_full_name,
+    is_in_tasks,
 )
 
 __all__ = [
@@ -10,4 +11,5 @@ __all__ = [
     "get_form_widget",
     "get_crud_urlpatterns",
     "get_user_full_name",
+    "is_in_tasks",
 ]

@@ -1,11 +1,11 @@
-from .auth import (
-    AuthMixin,
-    TaskAuthorRequiredMixin,
+from task_manager.base.auth import (
+    AuthorPermissionMixin,
+    AuthPermissionMixin,
     UserPermissionMixin,
 )
-from .base import BaseNameModelForm, BaseView, NamedModel
-from .base_tests import BaseCRUDTest
-from .base_views import (
+from task_manager.base.base import BaseNameModelForm, BaseView, NamedModel
+from task_manager.base.base_tests import BaseCRUDTest
+from task_manager.base.base_views import (
     BaseLoginView,
     BaseLogoutView,
     CreateView,
@@ -15,9 +15,9 @@ from .base_views import (
 )
 
 __all__ = [
-    "AuthMixin",
     "UserPermissionMixin",
-    "TaskAuthorRequiredMixin",
+    "AuthPermissionMixin",
+    "AuthorPermissionMixin",
     "BaseNameModelForm",
     "BaseView",
     "NamedModel",

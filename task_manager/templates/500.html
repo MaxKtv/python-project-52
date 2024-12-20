@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% load i18n %}
+{% block title %}{% trans "Internal Server Error" %}{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="alert alert-danger text-center" role="alert">
+                <h1 class="display-4">500</h1>
+                <p class="lead">{% trans "Oops! Something went wrong on our side." %}</p>
+                <p>{% trans "Please try again later, or contact support if the problem persists." %}</p>
+                <a href="{% url 'home' %}" class="btn btn-primary">{% trans "Go Back Home" %}</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

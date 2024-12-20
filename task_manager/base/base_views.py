@@ -8,7 +8,8 @@ from django.views.generic import DeleteView as DjangoDeleteView
 from django.views.generic import ListView as DjangoListView
 from django.views.generic import UpdateView as DjangoUpdateView
 
-from . import BaseView
+from task_manager.base import BaseView, NamedModel
+from task_manager.tools import is_in_tasks
 
 
 class ListView(BaseView, DjangoListView):
@@ -46,17 +47,25 @@ class DeleteView(BaseView, DjangoDeleteView):
         "Cannot delete this object because " "it's referenced by other objects."
     )
 
+    def handle_protected_error(self):
+        """Обработка ошибки, если объект защищен от удаления"""
+        messages.error(self.request, self.protected_message)
+        if self.success_url:
+            return redirect(self.success_url)
+        return redirect(self.get_success_url())
+
     def post(self, request, *args, **kwargs):
-        """Обработка POST-запроса"""
+        self.object = self.get_object()
+
+        if is_in_tasks(self.object, NamedModel):
+            return self.handle_protected_error()
+
         try:
             response = super().post(request, *args, **kwargs)
             messages.success(request, self.success_message)
             return response
         except ProtectedError:
-            messages.error(request, self.protected_message)
-            if self.success_url:
-                return redirect(self.success_url)
-            return redirect(self.get_success_url())
+            return self.handle_protected_error()
 
 
 class BaseLoginView:

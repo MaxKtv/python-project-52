@@ -1,12 +1,18 @@
 from django.utils.translation import gettext_lazy as _
 
-from task_manager.base import CreateView, DeleteView, ListView, UpdateView
+from task_manager.base import (
+    AuthPermissionMixin,
+    CreateView,
+    DeleteView,
+    ListView,
+    UpdateView,
+)
 
 from .forms import LabelForm
 from .models import Label
 
 
-class LabelListView(ListView):
+class LabelListView(AuthPermissionMixin, ListView):
     """Представление для просмотра списка меток"""
 
     model = Label
@@ -15,7 +21,7 @@ class LabelListView(ListView):
     context_object_name = "labels"
 
 
-class LabelCreateView(CreateView):
+class LabelCreateView(AuthPermissionMixin, CreateView):
     """Представление для создания метки"""
 
     model = Label
@@ -23,7 +29,7 @@ class LabelCreateView(CreateView):
     success_message = _("Label successfully created")
 
 
-class LabelUpdateView(UpdateView):
+class LabelUpdateView(AuthPermissionMixin, UpdateView):
     """Представление для обновления метки"""
 
     model = Label
@@ -31,7 +37,7 @@ class LabelUpdateView(UpdateView):
     success_message = _("Label successfully updated")
 
 
-class LabelDeleteView(DeleteView):
+class LabelDeleteView(AuthPermissionMixin, DeleteView):
     """Представление для удаления метки"""
 
     model = Label

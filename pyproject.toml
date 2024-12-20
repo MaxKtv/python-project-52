@@ -23,6 +23,23 @@ psycopg2-binary = "^2.9.10"
 flake8 = "^7.1.1"
 ruff = "^0.8.3"
 
+
+[tool.ruff]
+line-length = 80
+exclude = [
+    "migrations",
+    "settings.py"
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+
+
+[tool.ruff.lint]
+preview = true
+select = ["E", "F", "I", "C90"]
+
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
