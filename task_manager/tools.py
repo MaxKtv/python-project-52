@@ -1,7 +1,6 @@
 from django.forms import Select
 from django.urls import path
 
-
 FORM_CONTROL_ATTRS = {"class": "form-control"}
 
 
