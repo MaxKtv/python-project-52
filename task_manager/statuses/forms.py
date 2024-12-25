@@ -1,9 +1,9 @@
-from task_manager.base import BaseNameModelForm
+from django.forms import ModelForm
 
-from .models import Status
+from task_manager.statuses.models import Status
 
 
-class StatusForm(BaseNameModelForm):
+class StatusForm(ModelForm):
     class Meta:
         model = Status
         fields = ["name"]

@@ -1,4 +1,4 @@
-from task_manager.tools import get_crud_urlpatterns
+from django.urls import path
 
 from .views import (
     StatusCreateView,
@@ -9,6 +9,9 @@ from .views import (
 
 app_name = "statuses"
 
-urlpatterns = get_crud_urlpatterns(
-    StatusListView, StatusCreateView, StatusUpdateView, StatusDeleteView, ""
-)
+urlpatterns = [
+    path('', StatusListView.as_view(), name='list'),
+    path('create/', StatusCreateView.as_view(), name='create'),
+    path('<int:pk>/update/', StatusUpdateView.as_view(), name='update'),
+    path('<int:pk>/delete/', StatusDeleteView.as_view(), name='delete'),
+]

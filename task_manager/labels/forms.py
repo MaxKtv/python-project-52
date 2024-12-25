@@ -1,9 +1,9 @@
-from task_manager.base import BaseNameModelForm
+from django.forms import ModelForm
 
-from .models import Label
+from task_manager.labels.models import Label
 
 
-class LabelForm(BaseNameModelForm):
+class LabelForm(ModelForm):
     class Meta:
         model = Label
         fields = ["name"]

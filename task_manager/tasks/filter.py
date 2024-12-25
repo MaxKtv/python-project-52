@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as _
 
 from task_manager.labels.models import Label
 from task_manager.statuses.models import Status
-from task_manager.tools import get_form_widget, get_user_full_name
 
 from .models import Task
 
@@ -41,29 +40,14 @@ class TaskFilter(django_filters.FilterSet):
         ),
     )
 
-    def __init__(self, *args, **kwargs):
-        TaskFilter.request = kwargs.pop("request", None)
-        super().__init__(*args, **kwargs)
-
-        # Устанавливаем виджеты для фильтров
-        for field in ["status", "executor", "labels"]:
-            self.filters[field].widget = get_form_widget(
-                self.filters[field].queryset
-            )
-        self.filters["executor"].field.label_from_instance = get_user_full_name
-
     def filter_self_tasks(self, queryset, name, value):
         """Фильтрует задачи по текущему пользователю как автору"""
-        if not TaskFilter.request:  # Используем атрибут класса
-            return queryset
-        if not hasattr(TaskFilter.request, "user"):  # Используем атрибут класса
-            return queryset
-        if value and TaskFilter.request.user.is_authenticated:
-            filtered = queryset.filter(author_id=TaskFilter.request.user.id)
-            return filtered
+        if value:
+            user = self.request.user
+            return queryset.filter(author=user)
         return queryset
 
     class Meta:
         model = Task
         fields = ["status", "executor", "labels", "self_tasks"]
-        order_by = ["id"]  # Добавляем сортировку по умолчанию
+        order_by = ["id"]

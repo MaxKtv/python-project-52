@@ -1,6 +1,17 @@
-from task_manager.base.base import NamedModel
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
-class Label(NamedModel):
+class Label(models.Model):
+    name = models.CharField(
+        max_length=30,
+        unique=True,
+        verbose_name=_('Name'),
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
     class Meta:
-        pass
+        verbose_name = _('Label')

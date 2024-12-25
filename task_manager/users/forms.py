@@ -12,20 +12,6 @@ class CustomUserCreationForm(UserCreationForm):
         }
 
 
-class CustomUserUpdateForm(UserChangeForm):
-    """Форма для обновления данных пользователя и изменения пароля"""
-
-    password = None  # Убираем поле, связанное с паролем
-
-    class Meta:
-        model = User
-        fields = ["username", "first_name", "last_name", "email"]
-
-    def clean_password(self):
-        # Убеждаемся, что поле пароля полностью исключено
-        return ""
-
-
 class UserUpdateForm(UserChangeForm):
     """Форма для изменения данных пользователя и пароля"""
 

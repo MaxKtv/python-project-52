@@ -1,4 +1,4 @@
-from task_manager.tools import get_crud_urlpatterns
+from django.urls import path
 
 from .views import (
     LabelCreateView,
@@ -9,6 +9,9 @@ from .views import (
 
 app_name = "labels"
 
-urlpatterns = get_crud_urlpatterns(
-    LabelListView, LabelCreateView, LabelUpdateView, LabelDeleteView, ""
-)
+urlpatterns = [
+    path('', LabelListView.as_view(), name='list'),
+    path('create/', LabelCreateView.as_view(), name='create'),
+    path('<int:pk>/update/', LabelUpdateView.as_view(), name='update'),
+    path('<int:pk>/delete/', LabelDeleteView.as_view(), name='delete'),
+]

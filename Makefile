@@ -10,6 +10,9 @@ build:
 publish:
 	poetry publish --dry-run
 
+test:
+	poetry run python manage.py test -v 2
+
 lint:
 	poetry run flake8 task_manager
 
