@@ -4,13 +4,13 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
 
-from task_manager.mixins import AuthPermissionMixin, ProtectedMessageMixin
+from task_manager.mixins import AuthRequiredMixin, ProtectedMessageMixin
 
 from .forms import StatusForm
 from .models import Status
 
 
-class StatusListView(AuthPermissionMixin, ListView):
+class StatusListView(AuthRequiredMixin, ListView):
     """Представление для просмотра списка статусов"""
 
     model = Status
@@ -20,7 +20,7 @@ class StatusListView(AuthPermissionMixin, ListView):
     ordering = ["id"]
 
 
-class StatusCreateView(AuthPermissionMixin, SuccessMessageMixin, CreateView):
+class StatusCreateView(AuthRequiredMixin, SuccessMessageMixin, CreateView):
     """Представление для создания статуса"""
 
     model = Status
@@ -29,7 +29,7 @@ class StatusCreateView(AuthPermissionMixin, SuccessMessageMixin, CreateView):
     success_message = _("Status successfully created")
 
 
-class StatusUpdateView(AuthPermissionMixin, SuccessMessageMixin, UpdateView):
+class StatusUpdateView(AuthRequiredMixin, SuccessMessageMixin, UpdateView):
     """Представление для обновления статуса"""
 
     model = Status
@@ -38,7 +38,7 @@ class StatusUpdateView(AuthPermissionMixin, SuccessMessageMixin, UpdateView):
     success_message = _("Status successfully updated")
 
 
-class StatusDeleteView(AuthPermissionMixin, ProtectedMessageMixin, DeleteView):
+class StatusDeleteView(AuthRequiredMixin, ProtectedMessageMixin, DeleteView):
     """Представление для удаления статуса"""
 
     model = Status

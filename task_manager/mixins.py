@@ -10,7 +10,7 @@ NOT_PERMISSION_MODIFY_USER = _("You don't have permissions to modify user")
 NOT_TASKS_AUTHOR = _("A task can only be deleted by its author")
 
 
-class AuthPermissionMixin(LoginRequiredMixin):
+class AuthRequiredMixin(LoginRequiredMixin):
     """Миксин для проверки аутентификации."""
     auth_message = NOT_AUTHORIZED_MESSAGE
 
@@ -22,7 +22,7 @@ class AuthPermissionMixin(LoginRequiredMixin):
         return super().dispatch(request, *args, **kwargs)
 
 
-class UserPermissionMixin(AuthPermissionMixin, UserPassesTestMixin):
+class UserPermissionMixin(AuthRequiredMixin, UserPassesTestMixin):
     """Миксин для проверки прав на управление пользователями."""
     permission_message = NOT_PERMISSION_MODIFY_USER
     permission_url = reverse_lazy('users:list')

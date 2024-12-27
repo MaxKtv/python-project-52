@@ -5,14 +5,14 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django_filters.views import FilterView
 
-from task_manager.mixins import AuthorPermissionMixin, AuthPermissionMixin
+from task_manager.mixins import AuthorPermissionMixin, AuthRequiredMixin
 from task_manager.tasks.models import Task
 
 from .filter import TaskFilter
 from .forms import TaskForm
 
 
-class TaskListView(AuthPermissionMixin, FilterView):
+class TaskListView(AuthRequiredMixin, FilterView):
     """Представление для просмотра списка задач"""
 
     model = Task
@@ -27,14 +27,14 @@ class TaskListView(AuthPermissionMixin, FilterView):
         return kwargs
 
 
-class TaskDetailView(AuthPermissionMixin, DetailView):
+class TaskDetailView(AuthRequiredMixin, DetailView):
     """Представление для просмотра задачи"""
 
     model = Task
     template_name = "tasks/task_detail.html"
 
 
-class TaskCreateView(AuthPermissionMixin, SuccessMessageMixin, CreateView):
+class TaskCreateView(AuthRequiredMixin, SuccessMessageMixin, CreateView):
     """Представление для создания задачи"""
 
     model = Task
@@ -48,7 +48,7 @@ class TaskCreateView(AuthPermissionMixin, SuccessMessageMixin, CreateView):
         return super().form_valid(form)
 
 
-class TaskUpdateView(AuthPermissionMixin, SuccessMessageMixin, UpdateView):
+class TaskUpdateView(AuthRequiredMixin, SuccessMessageMixin, UpdateView):
     """Представление для обновления задачи"""
 
     model = Task

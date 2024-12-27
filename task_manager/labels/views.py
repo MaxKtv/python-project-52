@@ -4,13 +4,13 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
 
-from task_manager.mixins import AuthPermissionMixin, ProtectedMessageMixin
+from task_manager.mixins import AuthRequiredMixin, ProtectedMessageMixin
 
 from .forms import LabelForm
 from .models import Label
 
 
-class LabelListView(AuthPermissionMixin, ListView):
+class LabelListView(AuthRequiredMixin, ListView):
     """Представление для просмотра списка меток"""
 
     model = Label
@@ -19,7 +19,7 @@ class LabelListView(AuthPermissionMixin, ListView):
     ordering = ["id"]
 
 
-class LabelCreateView(AuthPermissionMixin, SuccessMessageMixin, CreateView):
+class LabelCreateView(AuthRequiredMixin, SuccessMessageMixin, CreateView):
     """Представление для создания метки"""
 
     model = Label
@@ -28,7 +28,7 @@ class LabelCreateView(AuthPermissionMixin, SuccessMessageMixin, CreateView):
     success_url = reverse_lazy("labels:list")
 
 
-class LabelUpdateView(AuthPermissionMixin, SuccessMessageMixin, UpdateView):
+class LabelUpdateView(AuthRequiredMixin, SuccessMessageMixin, UpdateView):
     """Представление для обновления метки"""
 
     model = Label
@@ -37,7 +37,7 @@ class LabelUpdateView(AuthPermissionMixin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy("labels:list")
 
 
-class LabelDeleteView(AuthPermissionMixin, ProtectedMessageMixin, DeleteView):
+class LabelDeleteView(AuthRequiredMixin, ProtectedMessageMixin, DeleteView):
     """Представление для удаления метки"""
 
     model = Label
